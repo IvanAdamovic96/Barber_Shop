@@ -8,7 +8,7 @@ public static partial class BarberMapper
 {
     public static Barber FromCreateDtoToEntityBarber(this BarberCreateDto dto)
     {
-        var barber = new Barber(dto.barberName, dto.phoneNumber, dto.email,dto.individualStartTime,dto.individualEndTime);
+        var barber = new Barber(dto.barberName, dto.phoneNumber, dto.email, dto.individualStartTime, dto.individualEndTime);
         return barber;
     }
 }

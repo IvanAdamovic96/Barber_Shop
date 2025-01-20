@@ -163,3 +163,4 @@ D:\BarberApp3\Hair.Api\obj\Debug\net8.0\refint\Hair.Api.dll
 D:\BarberApp3\Hair.Api\obj\Debug\net8.0\Hair.Api.pdb
 D:\BarberApp3\Hair.Api\obj\Debug\net8.0\Hair.Api.genruntimeconfig.cache
 D:\BarberApp3\Hair.Api\obj\Debug\net8.0\ref\Hair.Api.dll
+D:\BarberApp3\Hair.Api\obj\Debug\net8.0\Hair.Api.sourcelink.json

@@ -8,7 +8,7 @@ public class ScheduleAppointmentCreateDtoValidator : AbstractValidator<ScheduleA
     public ScheduleAppointmentCreateDtoValidator()
     {
         RuleFor(x => x.phoneNumber).MinimumLength(7);
-        RuleFor(x => x.phoneNumber).MaximumLength(15);
+        RuleFor(x => x.phoneNumber).MaximumLength(17);
         RuleFor(x=>x.firstName).MinimumLength(3);
         RuleFor(x=>x.lastName).MinimumLength(3);
     }

@@ -55,3 +55,4 @@ D:\BarberApp3\Hair.Infrastructure\obj\Debug\net8.0\refint\Hair.Infrastructure.dl
 D:\BarberApp3\Hair.Infrastructure\obj\Debug\net8.0\Hair.Infrastructure.pdb
 D:\BarberApp3\Hair.Infrastructure\obj\Debug\net8.0\Hair.Infrastructure.genruntimeconfig.cache
 D:\BarberApp3\Hair.Infrastructure\obj\Debug\net8.0\ref\Hair.Infrastructure.dll
+D:\BarberApp3\Hair.Infrastructure\obj\Debug\net8.0\Hair.Infrastructure.sourcelink.json

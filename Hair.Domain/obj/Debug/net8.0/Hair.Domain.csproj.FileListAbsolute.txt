@@ -34,3 +34,4 @@ D:\BarberApp3\Hair.Domain\obj\Debug\net8.0\Hair.Domain.dll
 D:\BarberApp3\Hair.Domain\obj\Debug\net8.0\refint\Hair.Domain.dll
 D:\BarberApp3\Hair.Domain\obj\Debug\net8.0\Hair.Domain.pdb
 D:\BarberApp3\Hair.Domain\obj\Debug\net8.0\ref\Hair.Domain.dll
+D:\BarberApp3\Hair.Domain\obj\Debug\net8.0\Hair.Domain.sourcelink.json

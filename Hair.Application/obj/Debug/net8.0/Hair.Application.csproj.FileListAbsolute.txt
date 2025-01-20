@@ -43,3 +43,4 @@ D:\BarberApp3\Hair.Application\obj\Debug\net8.0\Hair.Application.dll
 D:\BarberApp3\Hair.Application\obj\Debug\net8.0\refint\Hair.Application.dll
 D:\BarberApp3\Hair.Application\obj\Debug\net8.0\Hair.Application.pdb
 D:\BarberApp3\Hair.Application\obj\Debug\net8.0\ref\Hair.Application.dll
+D:\BarberApp3\Hair.Application\obj\Debug\net8.0\Hair.Application.sourcelink.json

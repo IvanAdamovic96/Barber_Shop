@@ -15,32 +15,28 @@ public class ScheduleAppointmentCommandHandler(IHairDbContext dbContext)
         CancellationToken cancellationToken)
     {
         
-     /*   var appointments = await dbContext.Appointments.Where(x => request.Schedule.barberId == x.Barberid).ToListAsync();
+        /*
+        var appointments = await dbContext.Appointments.Where(x => request.Schedule.barberId == x.Barberid).ToListAsync();
         var result = appointments.Select(appointment => new GetAllSchedulesByBarberIdDto
         {
             barberId = appointment.Barberid,
             time = appointment.Time
-        }).ToList();*/
+        }).ToList();
+        */
 
-     var s = await dbContext.Barbers.Where(x => request.Schedule.barberId == x.BarberId).FirstOrDefaultAsync();
-     var start = s.IndividualStartTime.Value;
-     var end = s.IndividualEndTime.Value;
-     //var usedAppointments = await dbContext.Appointments.Where(x => x.Time == request.Schedule.time).ToListAsync();
-
+        var s = await dbContext.Barbers.Where(x => request.Schedule.barberId == x.BarberId).FirstOrDefaultAsync();
+        var start = s.IndividualStartTime.Value;
+        var end = s.IndividualEndTime.Value;
+        //var usedAppointments = await dbContext.Appointments.Where(x => x.Time == request.Schedule.time).ToListAsync();
      
-     var isOccupied = await dbContext.Appointments
-         .AnyAsync(x => x.Barberid == request.Schedule.barberId && x.Time == request.Schedule.time, cancellationToken);
 
-     /*
-     if (isOccupied)
-     {
-         throw new Exception("Schedule already occupied");
-     }*/
+   
      
-     DateTime requestedTime = request.Schedule.time;
-     var z = requestedTime.TimeOfDay;
-     var minutes = requestedTime.Minute;
+        DateTime requestedTime = request.Schedule.time;
+        var z = requestedTime.TimeOfDay;
+        var minutes = requestedTime.Minute;
         DateTime now = DateTime.Now;
+        
         if (request.Schedule.time <= now)
         {
             throw new Exception("You cannot schedule an appointment in the past");
@@ -54,58 +50,60 @@ public class ScheduleAppointmentCommandHandler(IHairDbContext dbContext)
 
         if (minutes % 30 != 0)
         {
-            throw new Exception("You cannot schedule out of barber's work hours");
+            throw new Exception("You cannot schedule out of 30 minutes appointment");
         }
         
-            try
+        try
+        {
+            Customer customer = new Customer(
+                request.Schedule.firstName,
+                request.Schedule.lastName,
+                request.Schedule.email,
+                request.Schedule.phoneNumber);
+                
+                
+            Guid id = Guid.NewGuid();
+            Appointment appointment = new Appointment();
+            appointment.Id = id;
+            appointment.Time = requestedTime;
+            appointment.Barberid = request.Schedule.barberId;
+                
+            var occupiedSlots = await dbContext.Appointments
+                .Where(x => x.Barberid == request.Schedule.barberId) // Poredi samo datum
+                .ToListAsync(cancellationToken);
+
+            var occupiedAppointment = await dbContext.Appointments.Where(x => x.Time == request.Schedule.time).ToListAsync(
+                cancellationToken);
+
+            if (occupiedAppointment.Count > 0)
             {
-                Customer customer = new Customer(
-                    request.Schedule.firstName,
-                    request.Schedule.lastName,
-                    request.Schedule.email,
-                    request.Schedule.phoneNumber);
-                
-                
-                Guid id = Guid.NewGuid();
-                Appointment appointment = new Appointment();
-                appointment.Id = id;
-                appointment.Time = requestedTime;
-                appointment.Barberid = request.Schedule.barberId;
-                
-                var occupiedSlots = await dbContext.Appointments
-                    .Where(x => x.Barberid == request.Schedule.barberId) // Poredi samo datum
-                    .ToListAsync(cancellationToken);
-
-                var slotss = await dbContext.Appointments.Where(x => x.Time == request.Schedule.time).ToListAsync(
-                    cancellationToken);
-
-                if (slotss.Count > 0)
-                {
-                    throw new Exception("Already occupied!!");
-                }
-                
-
-                //var availableSlots = await GetAvailableSlots(start, end, request.Schedule.barberId, request.Schedule.time ,cancellationToken);
-                Console.WriteLine("Slobodni termini:");
-                foreach (var slot in occupiedSlots)
-                {
-                    Console.WriteLine(slot.ToString());
-                }
-                
-                dbContext.Customers.Add(customer);
-                dbContext.Appointments.Add(appointment);
-                await dbContext.SaveChangesAsync(cancellationToken);
-                return new ScheduleAppointmentCreateDto(customer.FirstName, customer.LastName, customer.Email,
-                    customer.PhoneNumber, requestedTime, request.Schedule.barberId);
+                throw new Exception("Schedule already occupied!!!");
             }
-            catch (Exception ex)
+            
+            
+
+            //var availableSlots = await GetAvailableSlots(start, end, request.Schedule.barberId, request.Schedule.time ,cancellationToken);
+            Console.WriteLine("Slobodni termini:");
+            foreach (var slot in occupiedSlots)
             {
-                Console.WriteLine(ex.Message);
-                return null;
+                Console.WriteLine(slot.ToString());
             }
+                
+            dbContext.Customers.Add(customer);
+            dbContext.Appointments.Add(appointment);
+            await dbContext.SaveChangesAsync(cancellationToken);
+            return new ScheduleAppointmentCreateDto(customer.FirstName, customer.LastName, customer.Email,
+                customer.PhoneNumber, requestedTime, request.Schedule.barberId);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            return null;
+        }
     }
     
 
+    /*
     private async Task<List<DateTime>> GetAvailableSlots(TimeSpan start, TimeSpan end, Guid barberId, DateTime vreme ,CancellationToken cancellationToken)
     {
         // Lista svih mogućih termina u radnom vremenu frizera
@@ -132,6 +130,7 @@ public class ScheduleAppointmentCommandHandler(IHairDbContext dbContext)
 
         return availableSlots;
     }
+    */
 
 
 

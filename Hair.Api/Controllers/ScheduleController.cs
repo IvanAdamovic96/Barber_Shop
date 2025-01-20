@@ -16,9 +16,16 @@ public class ScheduleController: ApiBaseController
     }
     
     [HttpGet]
-    public async Task<ActionResult<Appointment>> CreateBarberAsync([FromQuery]GetAllScheduledAppointments command)
+    public async Task<ActionResult<Appointment>> CreateBarbersAsync([FromQuery]GetAllScheduledAppointments query)
     {
-        return Ok(await Mediator.Send(command));
+        return Ok(await Mediator.Send(query));
+    }
+
+    [HttpGet("free-appointments")]
+    public async Task<IActionResult> GetFreeAppointments([FromQuery] TimeSpan selectedDate, [FromQuery] Guid barberId)
+    {
+        var query = new GetAllFreeAppointmentsQuery(selectedDate, barberId);
+        return Ok(await Mediator.Send(query));
     }
 
     
