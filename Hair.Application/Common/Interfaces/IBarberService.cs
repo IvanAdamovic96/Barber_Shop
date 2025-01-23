@@ -8,4 +8,11 @@ public interface IBarberService
         BarberCreateDto barberCreateDto, 
         CancellationToken cancellationToken
     );
+    
+    Task<List<BarberDetailsDto>> GetAllBarbersAsync(
+        Guid companyId, 
+        CancellationToken cancellationToken
+    );
+    
+    Boolean IsValidSerbianPhoneNumber(string phoneNumber);
 }

@@ -43,7 +43,26 @@ public class BarberService (IHairDbContext dbContext) : IBarberService
         return new BarberCreateDto(barberSaved.BarberId,barber.BarberName, barber.PhoneNumber, barber.Email, barber.IndividualStartTime, barber.IndividualEndTime);
     }
     
-    public static bool IsValidEmail(string email)
+    
+
+    public async Task<List<BarberDetailsDto>> GetAllBarbersAsync(Guid companyId, CancellationToken cancellationToken)
+    {
+        var barbers = await dbContext.Barbers.Where(x => x.Company.Id == companyId)
+            .Select(x=> new BarberDetailsDto(x.BarberName, x.Company.CompanyName))
+            .ToListAsync();
+
+        return barbers;
+    }
+
+    
+    
+    
+    
+    
+    
+    
+    
+    public bool IsValidEmail(string email)
     {
         if (string.IsNullOrWhiteSpace(email))
             return false;
@@ -87,10 +106,10 @@ public class BarberService (IHairDbContext dbContext) : IBarberService
         }
     }
     
-    public static bool IsValidSerbianPhoneNumber(string phoneNumber)
+    public bool IsValidSerbianPhoneNumber(string phoneNumber)
     {
         // Regex za više formata (prilagodite prema potrebi)
-        string pattern = @"^\+?381\s?(6\d{1})\s?\d{7,8}$";
+        string pattern = @"^\+?381\s?(6\d{1})\s?\d{6,7}$";
         return Regex.IsMatch(phoneNumber, pattern);
     }
 }

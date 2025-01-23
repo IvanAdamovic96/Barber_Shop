@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using Hair.Application.Barbers.Queries;
 using Hair.Application.Common.Interfaces;
 using Hair.Application.Companies;
 using Hair.Application.Companies.Commands;
@@ -22,7 +23,7 @@ public class CompanyController(IHairDbContext dbContext): ApiBaseController
         return Ok(await Mediator.Send(company)); 
     }
 
-    [HttpGet("get")]
+    [HttpGet("getCompanyById")]
     public async Task<ActionResult<Company>> GetCompanyAsync([FromQuery] CompanyDetailsQuery query)
     {
         return Ok(await Mediator.Send(query));

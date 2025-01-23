@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Hair.Infrastructure.Services;
 
-public class ScheduleService(IHairDbContext dbContext) : IScheduleService
+public class ScheduleService(IHairDbContext dbContext, IBarberService barberService) : IScheduleService
 {
     public async Task<ScheduleAppointmentCreateDto> CreateScheduleAppointmentAsync(ScheduleAppointmentCreateDto schedule,
         CancellationToken cancellationToken)
@@ -38,6 +38,12 @@ public class ScheduleService(IHairDbContext dbContext) : IScheduleService
         {
             throw new Exception("You cannot schedule out of 30 minutes appointment");
         }
+
+        if (!barberService.IsValidSerbianPhoneNumber(schedule.phoneNumber))
+        {
+            throw new Exception("Invalid phone number format!");
+        }
+        
         
         try
         {
