@@ -1,6 +1,7 @@
 ﻿using Hair.Application.Common.Interfaces;
 using Hair.Infrastructure.Configuration;
 using Hair.Infrastructure.Context;
+using Hair.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +17,11 @@ public static class DependencyInjection
         services.AddDbContext<ConnDbContext>(options=>options.UseNpgsql(dbConfiguration.ConnectionString,
             x=>x.MigrationsAssembly(typeof(ConnDbContext).Assembly.GetName().Name)));
         services.AddScoped<IHairDbContext>(provider => provider.GetRequiredService<ConnDbContext>());
+
+        services.AddScoped<IScheduleService, ScheduleService>();
+        services.AddScoped<ICompanyService, CompanyService>();
+        services.AddScoped<IBarberService, BarberService>();
+        
         return services;
     }
 }

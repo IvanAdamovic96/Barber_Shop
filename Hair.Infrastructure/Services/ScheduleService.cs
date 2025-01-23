@@ -1,48 +1,16 @@
 ﻿using Hair.Application.Common.Dto.Schedule;
 using Hair.Application.Common.Interfaces;
 using Hair.Domain.Entities;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Hair.Application.Schedules.Commands;
+namespace Hair.Infrastructure.Services;
 
-public record ScheduleAppointmentCommand(ScheduleAppointmentCreateDto Schedule): IRequest<ScheduleAppointmentCreateDto?>;
-
-public class ScheduleAppointmentCommandHandler(IScheduleService scheduleService)
-    : IRequestHandler<ScheduleAppointmentCommand, ScheduleAppointmentCreateDto?>
+public class ScheduleService(IHairDbContext dbContext) : IScheduleService
 {
-    public async Task<ScheduleAppointmentCreateDto?> Handle(ScheduleAppointmentCommand request,
+    public async Task<ScheduleAppointmentCreateDto> CreateScheduleAppointmentAsync(ScheduleAppointmentCreateDto schedule,
         CancellationToken cancellationToken)
     {
-        var x = await scheduleService.CreateScheduleAppointmentAsync(request.Schedule, cancellationToken);
-        return x;
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    /*
-        var s = await dbContext.Barbers.Where(x => request.Schedule.barberId == x.BarberId).FirstOrDefaultAsync();
+        var s = await dbContext.Barbers.Where(x => schedule.barberId == x.BarberId).FirstOrDefaultAsync();
         var start = s.IndividualStartTime.Value;
         var end = s.IndividualEndTime.Value;
         //var usedAppointments = await dbContext.Appointments.Where(x => x.Time == request.Schedule.time).ToListAsync();
@@ -50,12 +18,12 @@ public class ScheduleAppointmentCommandHandler(IScheduleService scheduleService)
         
         
         
-        DateTime requestedTime = request.Schedule.time;
+        DateTime requestedTime = schedule.time;
         var z = requestedTime.TimeOfDay;
         var minutes = requestedTime.Minute;
         DateTime now = DateTime.Now;
         
-        if (request.Schedule.time <= now)
+        if (schedule.time <= now)
         {
             throw new Exception("You cannot schedule an appointment in the past");
         }
@@ -74,23 +42,23 @@ public class ScheduleAppointmentCommandHandler(IScheduleService scheduleService)
         try
         {
             Customer customer = new Customer(
-                request.Schedule.firstName,
-                request.Schedule.lastName,
-                request.Schedule.email,
-                request.Schedule.phoneNumber);
+                schedule.firstName,
+                schedule.lastName,
+                schedule.email,
+                schedule.phoneNumber);
                 
                 
             Guid id = Guid.NewGuid();
             Appointment appointment = new Appointment();
             appointment.Id = id;
             appointment.Time = requestedTime;
-            appointment.Barberid = request.Schedule.barberId;
+            appointment.Barberid = schedule.barberId;
                 
             var occupiedSlots = await dbContext.Appointments
-                .Where(x => x.Barberid == request.Schedule.barberId) // Poredi samo datum
+                .Where(x => x.Barberid == schedule.barberId) // Poredi samo datum
                 .ToListAsync(cancellationToken);
 
-            var occupiedAppointment = await dbContext.Appointments.Where(x => x.Time == request.Schedule.time).ToListAsync(
+            var occupiedAppointment = await dbContext.Appointments.Where(x => x.Time == schedule.time).ToListAsync(
                 cancellationToken);
 
             if (occupiedAppointment.Count > 0)
@@ -111,12 +79,27 @@ public class ScheduleAppointmentCommandHandler(IScheduleService scheduleService)
             dbContext.Appointments.Add(appointment);
             await dbContext.SaveChangesAsync(cancellationToken);
             return new ScheduleAppointmentCreateDto(customer.FirstName, customer.LastName, customer.Email,
-                customer.PhoneNumber, requestedTime, request.Schedule.barberId);
+                customer.PhoneNumber, requestedTime, schedule.barberId);
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
             return null;
-        } 
-    */
+        }
+    }
+
+    
+
+
+    public async Task<List<GetAllSchedulesByBarberIdDto>> GetAllSchedulesByBarberIdAsync(
+        Guid barberId, CancellationToken cancellationToken)
+    {
+        var appointments = await dbContext.Appointments.Where(x => barberId == x.Barberid).ToListAsync();
+        var result = appointments.Select(appointment => new GetAllSchedulesByBarberIdDto
+        {
+            barberId = appointment.Barberid,
+            time = appointment.Time
+        }).ToList();
+        return result;
+    }
 }

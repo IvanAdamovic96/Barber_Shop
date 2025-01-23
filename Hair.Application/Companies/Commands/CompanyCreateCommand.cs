@@ -9,11 +9,20 @@ namespace Hair.Application.Companies.Commands;
 
 public record CompanyCreateCommand(CompanyCreateDto Company) : IRequest<CompanyCreateDto?>;
 
-public class CompanyCreateCommandHandler(IHairDbContext dbContext)
+public class CompanyCreateCommandHandler(ICompanyService companyService)
     : IRequestHandler<CompanyCreateCommand, CompanyCreateDto?>
 {
     public async Task<CompanyCreateDto?> Handle(CompanyCreateCommand request, CancellationToken cancellationToken)
     {
+        var x = await companyService.CreateCompanyAsync(request.Company, cancellationToken);
+        return x;
+    }
+    
+}
+
+
+
+/*
         Guid companyId = Guid.NewGuid();
         Company company = new Company(request.Company.CompanyName)
         {
@@ -29,11 +38,7 @@ public class CompanyCreateCommandHandler(IHairDbContext dbContext)
         dbContext.Companies.Add(companySaved);
         await dbContext.SaveChangesAsync(cancellationToken);
         return new CompanyCreateDto(company.CompanyName);
-
-    }
-}
-
-
+ */
 
 
 

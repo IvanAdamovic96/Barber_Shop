@@ -7,16 +7,13 @@ namespace Hair.Application.Schedules.Queries;
 
 public record GetAllScheduledAppointments(Guid barberId) : IRequest<IList<GetAllSchedulesByBarberIdDto>>;
 
-public class ProductDetailsQueryHandler(IHairDbContext dbContext) : IRequestHandler<GetAllScheduledAppointments, IList<GetAllSchedulesByBarberIdDto>>
+public class ProductDetailsQueryHandler(IScheduleService scheduleService) 
+    : IRequestHandler<GetAllScheduledAppointments, IList<GetAllSchedulesByBarberIdDto>>
 {
-    public async Task<IList<GetAllSchedulesByBarberIdDto>> Handle(GetAllScheduledAppointments request, CancellationToken cancellationToken)
+    public async Task<IList<GetAllSchedulesByBarberIdDto>> Handle(GetAllScheduledAppointments request, 
+        CancellationToken cancellationToken)
     {
-        var appointments = await dbContext.Appointments.Where(x => request.barberId == x.Barberid).ToListAsync();
-        var result = appointments.Select(appointment => new GetAllSchedulesByBarberIdDto
-        {
-            barberId = appointment.Barberid,
-            time = appointment.Time
-        }).ToList();
-        return result;
+        var x = await scheduleService.GetAllSchedulesByBarberIdAsync(request.barberId, cancellationToken);
+        return x;
     }
 }

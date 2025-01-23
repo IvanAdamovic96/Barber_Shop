@@ -9,24 +9,26 @@ namespace Hair.Api.Controllers;
 [Route("schedule")]
 public class ScheduleController: ApiBaseController
 {
-    [HttpPost]
+    [HttpPost ("CreateAppointment")]
     public async Task<ActionResult<Appointment>> CreateBarberAsync(ScheduleAppointmentCommand command)
     {
         return Ok(await Mediator.Send(command));
     }
     
-    [HttpGet]
+    [HttpGet ("GetAllUsedAppointments")]
     public async Task<ActionResult<Appointment>> CreateBarbersAsync([FromQuery]GetAllScheduledAppointments query)
     {
         return Ok(await Mediator.Send(query));
     }
 
+    /*
     [HttpGet("free-appointments")]
     public async Task<IActionResult> GetFreeAppointments([FromQuery] TimeSpan selectedDate, [FromQuery] Guid barberId)
     {
         var query = new GetAllFreeAppointmentsQuery(selectedDate, barberId);
         return Ok(await Mediator.Send(query));
     }
+    */
 
     
 }
