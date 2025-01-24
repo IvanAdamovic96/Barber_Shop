@@ -59,6 +59,19 @@ public class ScheduleService(IHairDbContext dbContext, IBarberService barberServ
             appointment.Id = id;
             appointment.Time = requestedTime;
             appointment.Barberid = schedule.barberId;
+
+            appointment.Time = new DateTime(
+                appointment.Time.Year,
+                appointment.Time.Month,
+                appointment.Time.Day,
+                appointment.Time.Hour,
+                appointment.Time.Minute,
+                0,   // Seconds set to 0
+                0 ,   // Milliseconds set to 0
+                DateTimeKind.Utc
+            );
+            
+            
                 
             var occupiedSlots = await dbContext.Appointments
                 .Where(x => x.Barberid == schedule.barberId) // Poredi samo datum
@@ -85,7 +98,7 @@ public class ScheduleService(IHairDbContext dbContext, IBarberService barberServ
             dbContext.Appointments.Add(appointment);
             await dbContext.SaveChangesAsync(cancellationToken);
             return new ScheduleAppointmentCreateDto(customer.FirstName, customer.LastName, customer.Email,
-                customer.PhoneNumber, requestedTime, schedule.barberId);
+                customer.PhoneNumber, appointment.Time, schedule.barberId);
         }
         catch (Exception ex)
         {
