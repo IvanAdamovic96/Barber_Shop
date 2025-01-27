@@ -5,7 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Hair.Infrastructure.Services;
 
-public class ScheduleService(IHairDbContext dbContext, IBarberService barberService) : IScheduleService
+public class ScheduleService(IHairDbContext dbContext, 
+                            IBarberService barberService, 
+                            INotificationService notificationService) : IScheduleService
 {
     public async Task<ScheduleAppointmentCreateDto> CreateScheduleAppointmentAsync(ScheduleAppointmentCreateDto schedule,
         CancellationToken cancellationToken)
@@ -88,12 +90,8 @@ public class ScheduleService(IHairDbContext dbContext, IBarberService barberServ
             
 
             //var availableSlots = await GetAvailableSlots(start, end, request.Schedule.barberId, request.Schedule.time ,cancellationToken);
-            Console.WriteLine("Slobodni termini:");
-            foreach (var slot in occupiedSlots)
-            {
-                Console.WriteLine(slot.ToString());
-            }
-                
+            await notificationService.SendSmsAsync(customer.PhoneNumber, "Zdravo");
+            
             dbContext.Customers.Add(customer);
             dbContext.Appointments.Add(appointment);
             await dbContext.SaveChangesAsync(cancellationToken);

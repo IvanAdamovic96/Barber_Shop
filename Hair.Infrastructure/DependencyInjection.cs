@@ -21,6 +21,7 @@ public static class DependencyInjection
         services.AddScoped<IScheduleService, ScheduleService>();
         services.AddScoped<ICompanyService, CompanyService>();
         services.AddScoped<IBarberService, BarberService>();
+        services.AddScoped<INotificationService, VonageNotificationService>();
         
         return services;
     }

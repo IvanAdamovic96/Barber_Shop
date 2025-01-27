@@ -9,11 +9,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddControllers();
+builder.Services.AddControllers(options => options.Filters.Add<ApiExceptionFilterAttribute>());
 //options => options.Filters.Add<ApiExceptionFilterAttribute>()
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
 builder.Services.AddInfrastructure(builder.Configuration);
+
 builder.Services.AddApplication();
 
 

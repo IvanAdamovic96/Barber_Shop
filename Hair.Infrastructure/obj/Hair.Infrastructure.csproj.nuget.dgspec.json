@@ -201,6 +201,14 @@
             "Npgsql.EntityFrameworkCore.PostgreSQL": {
               "target": "Package",
               "version": "[8.0.2, )"
+            },
+            "Twilio": {
+              "target": "Package",
+              "version": "[7.8.2, )"
+            },
+            "Vonage": {
+              "target": "Package",
+              "version": "[7.14.1, )"
             }
           },
           "imports": [
