@@ -46,6 +46,14 @@ public class ScheduleService(IHairDbContext dbContext,
             throw new Exception("Invalid phone number format!");
         }
         
+        var occupiedAppointment = await dbContext.Appointments.Where(x => x.Time == schedule.time).ToListAsync(
+            cancellationToken);
+
+        if (occupiedAppointment.Count > 0)
+        {
+            throw new Exception("Schedule already occupied!!!");
+        }
+        
         
         try
         {
@@ -61,6 +69,7 @@ public class ScheduleService(IHairDbContext dbContext,
             appointment.Id = id;
             appointment.Time = requestedTime;
             appointment.Barberid = schedule.barberId;
+            appointment.HaircutName = schedule.haircut;
 
             appointment.Time = new DateTime(
                 appointment.Time.Year,
@@ -74,18 +83,12 @@ public class ScheduleService(IHairDbContext dbContext,
             );
             
             
-                
+            /*
             var occupiedSlots = await dbContext.Appointments
                 .Where(x => x.Barberid == schedule.barberId) // Poredi samo datum
                 .ToListAsync(cancellationToken);
-
-            var occupiedAppointment = await dbContext.Appointments.Where(x => x.Time == schedule.time).ToListAsync(
-                cancellationToken);
-
-            if (occupiedAppointment.Count > 0)
-            {
-                throw new Exception("Schedule already occupied!!!");
-            }
+            */
+            
             
             
 
@@ -96,7 +99,7 @@ public class ScheduleService(IHairDbContext dbContext,
             dbContext.Appointments.Add(appointment);
             await dbContext.SaveChangesAsync(cancellationToken);
             return new ScheduleAppointmentCreateDto(customer.FirstName, customer.LastName, customer.Email,
-                customer.PhoneNumber, appointment.Time, schedule.barberId);
+                customer.PhoneNumber, appointment.Time, schedule.barberId, appointment.HaircutName);
         }
         catch (Exception ex)
         {

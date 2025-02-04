@@ -7,6 +7,8 @@ public class Appointment
     public Guid Id { get; set; } = Guid.NewGuid();
     public DateTime Time { get; set; }
     public Guid Barberid { get; set; }
+    
+    public string HaircutName { get; set; }
 
     public Appointment(Guid id, DateTime time, Guid barberid)
     {

@@ -6,7 +6,6 @@ public class Company
 {
     public Company( string companyName)
     {
-        var test = DateTime.Now.DayOfWeek == DayOfWeek.Saturday;
         CompanyName = companyName;
     }
 

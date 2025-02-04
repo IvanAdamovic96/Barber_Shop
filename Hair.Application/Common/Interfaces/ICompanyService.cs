@@ -15,8 +15,14 @@ public interface ICompanyService
         Guid companyId,
         CancellationToken cancellationToken
     );
+
+    Task<List<CompanyDetailsDto>> GetAllCompaniesAsync(
+        CompanyDetailsDto companyDetailsDto,
+        CancellationToken cancellationToken
+    );
     
-    
-    
-    
+
+
+
+
 }

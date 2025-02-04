@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using Hair.Application.Barbers.Queries;
+using Hair.Application.Common.Dto.Company;
 using Hair.Application.Common.Interfaces;
 using Hair.Application.Companies;
 using Hair.Application.Companies.Commands;
@@ -28,6 +29,10 @@ public class CompanyController(IHairDbContext dbContext): ApiBaseController
     {
         return Ok(await Mediator.Send(query));
     }
-    
-    
+
+    [HttpGet("getAllCompanies")]
+    public async Task<ActionResult<List<Company>>> GetAllCompaniesAsync()
+    {
+        return Ok(await Mediator.Send(new GetAllCompaniesQuery(CompanyDetailsDto: new CompanyDetailsDto())));
+    }
 }

@@ -12,17 +12,20 @@ public class CompanyService (IHairDbContext dbContext) : ICompanyService
     public async Task<CompanyCreateDto> CreateCompanyAsync(CompanyCreateDto companyCreate,
         CancellationToken cancellationToken)
     {
-        Guid companyId = Guid.NewGuid();
-        Company company = new Company(companyCreate.CompanyName)
-        {
-            Id = companyId,
-        };
         var x = await dbContext.Companies.Where(c => c.CompanyName == companyCreate.CompanyName)
             .FirstOrDefaultAsync();
         if (x is  not null)
         {
             throw new Exception($"Company {companyCreate.CompanyName} already exists");
         }
+        
+        Guid companyId = Guid.NewGuid();
+        Company company = new Company(companyCreate.CompanyName)
+        {
+            Id = companyId,
+        };
+        
+        
         var companySaved = companyCreate.FromCreateDtoToEntity();
         dbContext.Companies.Add(companySaved);
         await dbContext.SaveChangesAsync(cancellationToken);
@@ -44,5 +47,17 @@ public class CompanyService (IHairDbContext dbContext) : ICompanyService
 
         return barbers.Select(barber =>
             new BarberDetailsDto(barber.BarberName, barber.Company?.CompanyName ?? "No company")).ToList();
+    }
+
+    public async Task<List<CompanyDetailsDto>> GetAllCompaniesAsync(CompanyDetailsDto companyDetailsDto, CancellationToken cancellationToken)
+    {
+        var companies = await dbContext.Companies.ToListAsync(cancellationToken);
+
+        var result = companies.Select(x => new CompanyDetailsDto()
+        {
+            CompanyId = x.Id,
+            CompanyName = x.CompanyName
+        }).ToList();
+        return result;
     }
 }

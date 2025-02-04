@@ -13,6 +13,6 @@ public class Haircuts
     public int Duration { get; set; }
     public string HaircutType { get; set; }
     
-    Barber Barber { get; set; }
+    //Barber Barber { get; set; }
     
 }
