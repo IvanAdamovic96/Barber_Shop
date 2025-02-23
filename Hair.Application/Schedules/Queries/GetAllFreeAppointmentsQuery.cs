@@ -8,46 +8,44 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Hair.Application.Schedules.Queries;
 
-public record GetAllFreeAppointmentsQuery(TimeSpan selectedDate, Guid barberId): IRequest<List<FreeAppointmentsCheckDto>>;
+public record GetAllFreeAppointmentsQuery(DateTime selectedDate, Guid barberId): IRequest<List<FreeAppointmentsCheckDto>>;
 
 public class GetAllFreAppointmentsHandler(IHairDbContext dbContext) : IRequestHandler<GetAllFreeAppointmentsQuery, List<FreeAppointmentsCheckDto>>
 {
     public async Task<List<FreeAppointmentsCheckDto>> Handle(GetAllFreeAppointmentsQuery request, CancellationToken cancellationToken)
     {
-        var occupiedAppointment = await dbContext.Appointments.
-            Where(x => x.Time.TimeOfDay == request.selectedDate && x.Barberid == request.barberId).ToListAsync(cancellationToken);
+        var occupiedAppointments = await dbContext.Appointments
+            .Where(x => x.Time.Date == request.selectedDate.Date && x.Barberid == request.barberId)
+            .ToListAsync(cancellationToken);
 
-        var occupiedTimes = occupiedAppointment
-            .Select(app => app.Time.TimeOfDay)
+        var occupiedTimes = occupiedAppointments
+            .Select(app => app.Time) // Čuvamo puni DateTime sa vremenom
             .ToList();
-        
         
         
         var barberWorkTime = await dbContext.Barbers
             .Where(x=> x.BarberId == request.barberId)
             .FirstOrDefaultAsync(cancellationToken);
         
-        var startTime = barberWorkTime.IndividualStartTime.Value;
-        var endTime = barberWorkTime.IndividualEndTime.Value;
+        var startTime = request.selectedDate.Date.AddHours(barberWorkTime.IndividualStartTime.Value.Hours)
+                                                 .AddMinutes(barberWorkTime.IndividualStartTime.Value.Minutes);
+
+        var endTime = request.selectedDate.Date.AddHours(barberWorkTime.IndividualEndTime.Value.Hours)
+                                               .AddMinutes(barberWorkTime.IndividualEndTime.Value.Minutes);
         
-        var list = new List<TimeSpan>();
+        
+        var list = new List<DateTime>();
 
-        for (var i = startTime; i <= endTime; i = i + new TimeSpan(0, 30, 0))
+        
+        for (var i = startTime; i <= endTime; i = i.AddMinutes(30))
         {
-            foreach (var time in occupiedTimes)
-            {
-                if (!(time == i))
-                {
-                    list.Add(i);
-                }
-            }
+            list.Add(i);
         }
-
+        
+        list.RemoveAll(x => occupiedTimes.Contains(x));
         var list2 = list.Select(time => new FreeAppointmentsCheckDto(request.barberId, time)).ToList();
 
-
         return list2;
-        
 
     }
 }

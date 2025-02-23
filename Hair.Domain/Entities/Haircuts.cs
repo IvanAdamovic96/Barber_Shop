@@ -9,9 +9,9 @@ public class Haircuts
         HaircutType = haircutType;
     }
 
-    public Guid Id { get; set; }
-    public int Duration { get; set; }
-    public string HaircutType { get; set; }
+    public Guid Id { get; private set; }
+    public int Duration { get; private set; }
+    public string HaircutType { get; private set; }
     
     //Barber Barber { get; set; }
     

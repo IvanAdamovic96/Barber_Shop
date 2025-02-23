@@ -12,20 +12,16 @@ public class BarberService (IHairDbContext dbContext) : IBarberService
 {
     public async Task<BarberCreateDto> BarberCreateAsync(BarberCreateDto barberCreateDto, CancellationToken cancellationToken)
     {
-        Guid barberId = Guid.NewGuid();
-        
         
         var company = await dbContext.Companies.Where(x => x.Id == barberCreateDto.companyId).FirstOrDefaultAsync(cancellationToken);
-        
+
         Barber barber = new Barber(
-            barberCreateDto.barberName, 
-            barberCreateDto.phoneNumber, 
+            barberCreateDto.barberName,
+            barberCreateDto.phoneNumber,
             barberCreateDto.email,
             barberCreateDto.individualStartTime,
             barberCreateDto.individualEndTime)
-        {
-            BarberId = barberId
-        };
+            .AddBarberCompany(company);
 
         if (!IsValidEmail(barberCreateDto.email))
         {

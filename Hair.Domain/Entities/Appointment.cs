@@ -4,22 +4,30 @@ namespace Hair.Domain.Entities;
 
 public class Appointment
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
-    public DateTime Time { get; set; }
-    public Guid Barberid { get; set; }
+    public Guid Id { get; private set; }
+    public DateTime Time { get; private set; }
+    public Guid Barberid { get; private set; }
     
-    public string HaircutName { get; set; }
+    public string HaircutName { get; private set; }
 
-    public Appointment(Guid id, DateTime time, Guid barberid)
+    public Appointment(DateTime time, Guid barberid)
     {
-        Id = id;
+        Id = Guid.NewGuid();
         Time = time;
         Barberid = barberid;
     }
 
-    public Appointment()
+
+    public Appointment SetTime(DateTime time)
     {
-        
+        Time = time;
+        return this;
+    }
+
+    public Appointment SetHaircutName(string haircutName)
+    {
+        HaircutName = haircutName;
+        return this;
     }
 
     /*

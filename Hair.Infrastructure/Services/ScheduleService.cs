@@ -65,22 +65,19 @@ public class ScheduleService(IHairDbContext dbContext,
                 
                 
             Guid id = Guid.NewGuid();
-            Appointment appointment = new Appointment();
-            appointment.Id = id;
-            appointment.Time = requestedTime;
-            appointment.Barberid = schedule.barberId;
-            appointment.HaircutName = schedule.haircut;
+            Appointment appointment = new Appointment(requestedTime, schedule.barberId);
+            appointment.SetHaircutName(schedule.haircut);
 
-            appointment.Time = new DateTime(
+            appointment.SetTime(new DateTime(
                 appointment.Time.Year,
                 appointment.Time.Month,
                 appointment.Time.Day,
                 appointment.Time.Hour,
                 appointment.Time.Minute,
-                0,   // Seconds set to 0
-                0 ,   // Milliseconds set to 0
+                0, // Seconds set to 0
+                0, // Milliseconds set to 0
                 DateTimeKind.Utc
-            );
+            ));
             
             
             /*

@@ -2,5 +2,5 @@
 
 public record FreeAppointmentsCheckDto(
         Guid barberId,
-        TimeSpan dateAndTime
+        DateTime dateAndTime
     );

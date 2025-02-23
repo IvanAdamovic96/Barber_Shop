@@ -7,10 +7,11 @@ public class Company
     public Company( string companyName)
     {
         CompanyName = companyName;
+        Id = Guid.NewGuid();
     }
 
-    public Guid Id { get; set; }
-    public string CompanyName { get; set; }
+    public Guid Id { get; private set; }
+    public string CompanyName { get; private set; }
     
     public IList<Barber> Barbers { get; set; } = new List<Barber>();
     

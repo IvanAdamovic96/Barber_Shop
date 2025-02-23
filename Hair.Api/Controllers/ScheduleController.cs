@@ -21,14 +21,11 @@ public class ScheduleController: ApiBaseController
         return Ok(await Mediator.Send(query));
     }
 
-    /*
-    [HttpGet("free-appointments")]
-    public async Task<IActionResult> GetFreeAppointments([FromQuery] TimeSpan selectedDate, [FromQuery] Guid barberId)
+    [HttpGet ("GetAllFreeAppointments")]
+    public async Task<ActionResult<Appointment>> GetAllFreeAppointmentsAsync([FromQuery]GetAllFreeAppointmentsQuery query)
     {
-        var query = new GetAllFreeAppointmentsQuery(selectedDate, barberId);
         return Ok(await Mediator.Send(query));
     }
-    */
 
     
 }

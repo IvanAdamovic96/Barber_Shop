@@ -19,11 +19,7 @@ public class CompanyService (IHairDbContext dbContext) : ICompanyService
             throw new Exception($"Company {companyCreate.CompanyName} already exists");
         }
         
-        Guid companyId = Guid.NewGuid();
-        Company company = new Company(companyCreate.CompanyName)
-        {
-            Id = companyId,
-        };
+        Company company = new Company(companyCreate.CompanyName);
         
         
         var companySaved = companyCreate.FromCreateDtoToEntity();
