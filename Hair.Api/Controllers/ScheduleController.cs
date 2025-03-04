@@ -10,13 +10,23 @@ namespace Hair.Api.Controllers;
 public class ScheduleController: ApiBaseController
 {
     [HttpPost ("CreateAppointment")]
-    public async Task<ActionResult<Appointment>> CreateBarberAsync(ScheduleAppointmentCommand command)
+    public async Task<ActionResult<Appointment>> CreateAppointmentAsync(ScheduleAppointmentCommand command)
     {
-        return Ok(await Mediator.Send(command));
+        try
+        {
+            var result = await Mediator.Send(command);
+            
+            return Ok(new { Message = "Successfully scheduled appointment.", Data = result });
+        }
+        catch (Exception ex)
+        {
+           
+            return BadRequest(new { Message = ex.Message });
+        }
     }
     
     [HttpGet ("GetAllUsedAppointments")]
-    public async Task<ActionResult<Appointment>> CreateBarbersAsync([FromQuery]GetAllScheduledAppointments query)
+    public async Task<ActionResult<Appointment>> GetAllUsedAppointmentsAsync([FromQuery]GetAllScheduledAppointments query)
     {
         return Ok(await Mediator.Send(query));
     }

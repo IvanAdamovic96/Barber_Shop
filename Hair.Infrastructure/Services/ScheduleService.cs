@@ -1,4 +1,5 @@
-﻿using Hair.Application.Common.Dto.Schedule;
+﻿using FluentValidation;
+using Hair.Application.Common.Dto.Schedule;
 using Hair.Application.Common.Interfaces;
 using Hair.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -12,49 +13,36 @@ public class ScheduleService(IHairDbContext dbContext,
     public async Task<ScheduleAppointmentCreateDto> CreateScheduleAppointmentAsync(ScheduleAppointmentCreateDto schedule,
         CancellationToken cancellationToken)
     {
-        var s = await dbContext.Barbers.Where(x => schedule.barberId == x.BarberId).FirstOrDefaultAsync();
-        var start = s.IndividualStartTime.Value;
-        var end = s.IndividualEndTime.Value;
-        //var usedAppointments = await dbContext.Appointments.Where(x => x.Time == request.Schedule.time).ToListAsync();
-        
-        
-        
-        
-        DateTime requestedTime = schedule.time;
-        var z = requestedTime.TimeOfDay;
-        var minutes = requestedTime.Minute;
-        DateTime now = DateTime.Now;
-        
-        if (schedule.time <= now)
+        bool isWithinWorkHours = await IsWithinBarberWorkHours(schedule, cancellationToken);
+        if (!isWithinWorkHours)
         {
-            throw new Exception("You cannot schedule an appointment in the past");
+            throw new Exception("Barber is not available during the requested time.");
         }
+        
+        DateTime normalizedTime = new DateTime(
+            schedule.time.Year,
+            schedule.time.Month,
+            schedule.time.Day,
+            schedule.time.Hour,
+            schedule.time.Minute,
+            0, 
+            0, 
+            schedule.time.Kind 
+        );
 
-        if (z < start || z >= end )
+       
+      /*  var occupiedAppointment = await dbContext.Appointments
+            .FirstOrDefaultAsync(x => x.Time == normalizedTime, cancellationToken);*/
+        var x = await IsAppointmentAvailable(normalizedTime, cancellationToken);
+        if (x)
         {
-            throw new Exception("You cannot schedule out of barber's work hours");
-            
+            throw new ValidationException("Schedule appointment already exists.");
         }
-
-        if (minutes % 30 != 0)
+      /*  bool checkEmail = barberService.IsValidEmail(schedule.email);
+        if (!checkEmail)
         {
-            throw new Exception("You cannot schedule out of 30 minutes appointment");
-        }
-
-        if (!barberService.IsValidSerbianPhoneNumber(schedule.phoneNumber))
-        {
-            throw new Exception("Invalid phone number format!");
-        }
-        
-        var occupiedAppointment = await dbContext.Appointments.Where(x => x.Time == schedule.time).ToListAsync(
-            cancellationToken);
-
-        if (occupiedAppointment.Count > 0)
-        {
-            throw new Exception("Schedule already occupied!!!");
-        }
-        
-        
+            throw new ValidationException("Invalid email address.");
+        }*/
         try
         {
             Customer customer = new Customer(
@@ -64,8 +52,8 @@ public class ScheduleService(IHairDbContext dbContext,
                 schedule.phoneNumber);
                 
                 
-            Guid id = Guid.NewGuid();
-            Appointment appointment = new Appointment(requestedTime, schedule.barberId);
+       
+            Appointment appointment = new Appointment(schedule.time,schedule.barberId);
             appointment.SetHaircutName(schedule.haircut);
 
             appointment.SetTime(new DateTime(
@@ -79,17 +67,7 @@ public class ScheduleService(IHairDbContext dbContext,
                 DateTimeKind.Utc
             ));
             
-            
-            /*
-            var occupiedSlots = await dbContext.Appointments
-                .Where(x => x.Barberid == schedule.barberId) // Poredi samo datum
-                .ToListAsync(cancellationToken);
-            */
-            
-            
-            
-
-            //var availableSlots = await GetAvailableSlots(start, end, request.Schedule.barberId, request.Schedule.time ,cancellationToken);
+          
             await notificationService.SendSmsAsync(customer.PhoneNumber, "Zdravo");
             
             dbContext.Customers.Add(customer);
@@ -100,8 +78,9 @@ public class ScheduleService(IHairDbContext dbContext,
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
-            return null;
+            
+
+            throw new Exception(ex.Message);
         }
     }
 
@@ -118,5 +97,21 @@ public class ScheduleService(IHairDbContext dbContext,
             time = appointment.Time
         }).ToList();
         return result;
+    }
+    
+    private async Task<bool> IsWithinBarberWorkHours(ScheduleAppointmentCreateDto schedule, CancellationToken cancellationToken)
+    {
+        var barber = await dbContext.Barbers.FirstOrDefaultAsync(x => x.BarberId == schedule.barberId, cancellationToken);
+        if (barber == null) return false;
+
+        var start = barber.IndividualStartTime.Value;
+        var end = barber.IndividualEndTime.Value;
+        return schedule.time.TimeOfDay >= start && schedule.time.TimeOfDay < end;
+    }
+
+    private async Task<bool> IsAppointmentAvailable(DateTime time, CancellationToken cancellationToken)
+    {
+        var occupied = await dbContext.Appointments.Where(x => x.Time == time).FirstOrDefaultAsync(cancellationToken);
+        return occupied != null;
     }
 }

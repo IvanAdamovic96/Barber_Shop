@@ -1,16 +1,30 @@
 ﻿using FluentValidation;
 using Hair.Application.Common.Dto.Schedule;
+using Hair.Application.Common.Interfaces;
 
 namespace Hair.Application.Common.Validators;
 
 public class ScheduleAppointmentCreateDtoValidator : AbstractValidator<ScheduleAppointmentCreateDto>
 {
-    public ScheduleAppointmentCreateDtoValidator()
+    private readonly IBarberService _barberService;
+
+    public ScheduleAppointmentCreateDtoValidator( IBarberService barberService)
     {
-        RuleFor(x => x.phoneNumber).MinimumLength(7);
-        RuleFor(x => x.phoneNumber).MaximumLength(17);
-        RuleFor(x=>x.firstName).MinimumLength(3);
-        RuleFor(x=>x.lastName).MinimumLength(3);
+        
+        _barberService = barberService;
+
+        RuleFor(x => x.time)
+            .GreaterThan(DateTime.Now).WithMessage("You cannot schedule an appointment in the past");
+
+        RuleFor(x => x.time.Minute)
+            .Must(m => m % 30 == 0).WithMessage("Appointments must be scheduled in 30-minute intervals");
+
+       
+        RuleFor(x => x.phoneNumber)
+            .Must(phone => _barberService.IsValidSerbianPhoneNumber(phone))
+            .WithMessage("Invalid phone number format!");
+        RuleFor(x => x.email).Must(mail => barberService.IsValidEmail(mail)).WithMessage("Invalid email format!");
+
     }
     
 }

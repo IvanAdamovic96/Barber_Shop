@@ -3,6 +3,7 @@ using FluentValidation.AspNetCore;
 using Hair.Api.Filters;
 using Hair.Application;
 using Hair.Infrastructure;
+using Hair.Infrastructure.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +17,8 @@ builder.Services.AddFluentValidationClientsideAdapters();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddApplication();
-
+builder.Services.Configure<PostgresDbConfiguration>(
+    builder.Configuration.GetSection("PostgresDbConfiguration"));
 
 var app = builder.Build();
 

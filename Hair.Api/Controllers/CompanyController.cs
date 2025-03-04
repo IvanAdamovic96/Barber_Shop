@@ -21,7 +21,15 @@ public class CompanyController(IHairDbContext dbContext): ApiBaseController
     [HttpPost("create")]
     public async Task<ActionResult<Company>> CreateCompanyAsync(CompanyCreateCommand company)
     {
-        return Ok(await Mediator.Send(company)); 
+        try
+        {
+            var result = await Mediator.Send(company);
+            return Ok(new { Message = "Company created", Data = result });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { Message = "Error", Data = ex.Message });
+        }
     }
 
     [HttpGet("getCompanyById")]

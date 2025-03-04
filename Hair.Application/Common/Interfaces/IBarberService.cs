@@ -15,4 +15,6 @@ public interface IBarberService
     );
     
     Boolean IsValidSerbianPhoneNumber(string phoneNumber);
+    
+    Boolean IsValidEmail(string email);
 }
