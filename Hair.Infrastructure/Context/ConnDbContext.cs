@@ -16,6 +16,21 @@ public class ConnDbContext : DbContext,IHairDbContext
     {
         _connectionString = postgresConfig.Value.ConnectionString;
     }
+    /*
+    public ConnDbContext(DbContextOptions<ConnDbContext> options, IOptions<PostgresDbConfiguration> postgresConfig)
+        : base(options)
+    {
+        var config = postgresConfig.Value;
+        
+        if (string.IsNullOrEmpty(config.DbHost))
+        {
+            throw new ArgumentException("Database Host is not set in the configuration.");
+        }
+
+        _connectionString = config.GetConnectionString();
+        Console.WriteLine($"Using Connection String: {_connectionString}");
+    }*/
+
 
     public ConnDbContext()
     {
@@ -26,7 +41,7 @@ public class ConnDbContext : DbContext,IHairDbContext
     {
         if (!optionsBuilder.IsConfigured)
         {
-            optionsBuilder.UseNpgsql(_connectionString);
+            optionsBuilder.UseNpgsql("Host=localhost;Username=postgres;Password=ivan");
         }
     } 
         

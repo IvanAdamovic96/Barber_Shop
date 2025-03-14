@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Hair.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8ed6e3d1dab1ba20c99d1585b40999e6ae4ef66f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+58d58f5017f451f67dd01defaf7d9217354f21d3")]
 [assembly: System.Reflection.AssemblyProductAttribute("Hair.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Hair.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

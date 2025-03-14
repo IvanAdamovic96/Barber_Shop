@@ -7,5 +7,12 @@ public class PostgresDbConfiguration
     public string? DbName { get; set; }
     public string? UserName { get; set; }
     public string? Password { get; set; }
-    public string ConnectionString => $"Host={DbHost}; Database={DbName}; Username={UserName}; Password={Password}";
+    public string ConnectionString => $"Host={DbHost}; Port={DbPort}; Database={DbName}; Username={UserName}; Password={Password}";
+    
+    /*public string GetConnectionString()
+    {
+        var connString = $"Host={DbHost};Port={DbPort};Database={DbName};Username={UserName};Password={Password}";
+        Console.WriteLine($"Generated Connection String: {connString}");
+        return connString;
+    }*/
 }
