@@ -1,0 +1,37 @@
+﻿@page "/companies"
+@using Hair.Application.Common.Dto.Company
+@using Hair.Application.Common.Interfaces
+@inject ICompanyService CompanyService
+
+<PageTitle>Companies</PageTitle>
+
+<h3>All available companies</h3>
+
+@if (_companies.Count == 0)
+{
+    <p>No companies available!</p>
+}
+else
+{
+    <ul>
+        @foreach (var company in _companies)
+        {
+            <li>
+                <NavLink class="nav-link" href="@($"/companies/{company.CompanyId}")">
+                    <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span>@company.CompanyName
+                </NavLink>
+            </li>
+        }
+    </ul>
+}
+
+
+
+@code {
+    private List<CompanyDetailsDto> _companies = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _companies = await CompanyService.GetAllCompaniesAsync(new CompanyDetailsDto(), CancellationToken.None);
+    }
+}

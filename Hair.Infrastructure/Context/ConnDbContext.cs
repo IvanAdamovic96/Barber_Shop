@@ -11,17 +11,22 @@ namespace Hair.Infrastructure.Context;
 public class ConnDbContext : DbContext,IHairDbContext
 {
     private readonly string _connectionString;
+
+    public ConnDbContext(DbContextOptions<ConnDbContext> options) : base(options) { }
     
+    
+    /*
     public ConnDbContext(DbContextOptions<ConnDbContext> options, IOptions<PostgresDbConfiguration> postgresConfig): base(options)
     {
         _connectionString = postgresConfig.Value.ConnectionString;
     }
-    /*
+
+
     public ConnDbContext(DbContextOptions<ConnDbContext> options, IOptions<PostgresDbConfiguration> postgresConfig)
         : base(options)
     {
         var config = postgresConfig.Value;
-        
+
         if (string.IsNullOrEmpty(config.DbHost))
         {
             throw new ArgumentException("Database Host is not set in the configuration.");
@@ -41,7 +46,7 @@ public class ConnDbContext : DbContext,IHairDbContext
     {
         if (!optionsBuilder.IsConfigured)
         {
-            optionsBuilder.UseNpgsql("Host=localhost;Username=postgres;Password=ivan");
+            optionsBuilder.UseNpgsql(_connectionString);
         }
     } 
         

@@ -2,6 +2,7 @@ using System.ComponentModel;
 using FluentValidation.AspNetCore;
 using Hair.Api.Filters;
 using Hair.Application;
+using Hair.Application.Common.Interfaces;
 using Hair.Infrastructure;
 using Hair.Infrastructure.Configuration;
 using Hair.Infrastructure.Context;
@@ -20,9 +21,15 @@ builder.Services.AddFluentValidationClientsideAdapters();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddApplication();
-builder.Services.Configure<PostgresDbConfiguration>(
-    builder.Configuration.GetSection("PostgresDbConfiguration"));
+
+builder.Services.AddScoped<IHairDbContext, ConnDbContext>();
+builder.Services.AddDbContext<ConnDbContext>(options =>     
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 /*
+ builder.Services.Configure<PostgresDbConfiguration>(
+    builder.Configuration.GetSection("PostgresDbConfiguration"));
+ 
 builder.Services.AddSingleton(resolver =>
     resolver.GetRequiredService<IOptions<PostgresDbConfiguration>>().Value);
 var config = builder.Configuration.GetSection("PostgresDbConfiguration").Get<PostgresDbConfiguration>();

@@ -1,0 +1,113 @@
+﻿@page "/companies/{id:guid}"
+@using Hair.Application.Common.Dto.Schedule
+@using Hair.Application.Common.Dto.Barber
+@using Hair.Application.Common.Dto.Company
+@using Hair.Application.Common.Interfaces
+@using Hair.Application.Schedules.Queries
+@using Hair.Infrastructure.Services
+@using MediatR
+@using MudBlazor
+@inject ICompanyService CompanyService
+@inject IMediator Mediator
+
+
+<h3>CompanyDetails</h3>
+
+@if (_barbers.Any())
+{
+    <ul>
+        @foreach (var barber in _barbers)
+        {
+            <li>
+                <h5>@barber.BarberName</h5>
+                <p><strong>Company: </strong> @barber.CompanyName</p>
+                
+                <MudButton OnClick="() => SelectedBarber(barber.BarberId)" Color="Color.Error">
+                    Check free appointments here!
+                </MudButton>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>There are no barbers available right now!</p>
+}
+
+<MudCard>
+    <MudCardContent>
+        <MudDatePicker PickerVariant="PickerVariant.Static" DateChanged="OnDateSelected" Rounded="true" Elevation="2"></MudDatePicker>
+    </MudCardContent>
+</MudCard>
+
+@if (_freeAppointments.Any())
+{
+    <MudList T="string">
+        @foreach (var appointment in _freeAppointments)
+        {
+            <MudListItem T="string">
+                <MudText>@appointment.dateAndTime.ToString("HH:mm:ss")</MudText>
+            </MudListItem>
+        }
+    </MudList>
+}
+
+
+
+
+
+
+
+
+@code {
+    [Parameter]
+    public Guid BarberId { get; set; }
+    private string _dateFormat = "dd.MM.yyyy";
+    private DateTime? _selectedDate = DateTime.Today;
+    private List<FreeAppointmentsCheckDto> _freeAppointments = new();
+    private List<BarberFullDetailsDto> _barbers = new();
+    private string _bound = "not set";
+    [Parameter] 
+    public Guid Id { get; set; }
+    
+    
+    
+    protected override async Task OnInitializedAsync()
+    {
+        _barbers = await CompanyService.CompanyDetailsByIdAsync(Id, CancellationToken.None);
+        StateHasChanged();
+    }
+    
+    
+    
+    private async Task OnDateSelected(DateTime? newDate)
+    {
+        if (newDate.HasValue)
+        {
+            _selectedDate = newDate;
+        }
+        else
+        {
+            _selectedDate = DateTime.Today;
+        }
+
+        await LoadFreeAppointments(BarberId);
+        StateHasChanged();
+    }
+
+    private async Task LoadFreeAppointments(Guid barberId)
+    {
+        var query = new GetAllFreeAppointmentsQuery(_selectedDate ?? DateTime.Today, barberId);
+        _freeAppointments = await Mediator.Send(query);
+        StateHasChanged();
+    }
+
+    private async Task SelectedBarber(Guid barberId)
+    {
+        BarberId = barberId;
+        await LoadFreeAppointments(BarberId);
+        StateHasChanged();
+    }
+    
+    
+}

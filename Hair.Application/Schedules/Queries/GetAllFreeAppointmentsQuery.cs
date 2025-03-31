@@ -8,14 +8,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Hair.Application.Schedules.Queries;
 
-public record GetAllFreeAppointmentsQuery(DateTime selectedDate, Guid barberId): IRequest<List<FreeAppointmentsCheckDto>>;
+public record GetAllFreeAppointmentsQuery(DateTime SelectedDate, Guid BarberId): IRequest<List<FreeAppointmentsCheckDto>>;
 
 public class GetAllFreAppointmentsHandler(IHairDbContext dbContext) : IRequestHandler<GetAllFreeAppointmentsQuery, List<FreeAppointmentsCheckDto>>
 {
     public async Task<List<FreeAppointmentsCheckDto>> Handle(GetAllFreeAppointmentsQuery request, CancellationToken cancellationToken)
     {
         var occupiedAppointments = await dbContext.Appointments
-            .Where(x => x.Time.Date == request.selectedDate.Date && x.Barberid == request.barberId)
+            .Where(x => x.Time.Date == request.SelectedDate.Date && x.Barberid == request.BarberId)
             .ToListAsync(cancellationToken);
 
         var occupiedTimes = occupiedAppointments
@@ -24,13 +24,13 @@ public class GetAllFreAppointmentsHandler(IHairDbContext dbContext) : IRequestHa
         
         
         var barberWorkTime = await dbContext.Barbers
-            .Where(x=> x.BarberId == request.barberId)
+            .Where(x=> x.BarberId == request.BarberId)
             .FirstOrDefaultAsync(cancellationToken);
         
-        var startTime = request.selectedDate.Date.AddHours(barberWorkTime.IndividualStartTime.Value.Hours)
+        var startTime = request.SelectedDate.Date.AddHours(barberWorkTime.IndividualStartTime.Value.Hours)
                                                  .AddMinutes(barberWorkTime.IndividualStartTime.Value.Minutes);
 
-        var endTime = request.selectedDate.Date.AddHours(barberWorkTime.IndividualEndTime.Value.Hours)
+        var endTime = request.SelectedDate.Date.AddHours(barberWorkTime.IndividualEndTime.Value.Hours)
                                                .AddMinutes(barberWorkTime.IndividualEndTime.Value.Minutes);
         
         
@@ -43,7 +43,7 @@ public class GetAllFreAppointmentsHandler(IHairDbContext dbContext) : IRequestHa
         }
         
         list.RemoveAll(x => occupiedTimes.Contains(x));
-        var list2 = list.Select(time => new FreeAppointmentsCheckDto(request.barberId, time)).ToList();
+        var list2 = list.Select(time => new FreeAppointmentsCheckDto(request.BarberId, time)).ToList();
 
         return list2;
 

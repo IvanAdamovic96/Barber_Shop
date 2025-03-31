@@ -1,0 +1,41 @@
+{
+  "Files": [
+    {
+      "Id": "D:\\BarberApp3\\Hair.Client\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\Hair.Client.bundle.scp.css",
+      "PackagePath": "staticwebassets\\Hair.Client.bundle.scp.css"
+    },
+    {
+      "Id": "D:\\BarberApp3\\Hair.Client\\wwwroot\\app.css",
+      "PackagePath": "staticwebassets\\app.css"
+    },
+    {
+      "Id": "D:\\BarberApp3\\Hair.Client\\wwwroot\\bootstrap\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\bootstrap\\bootstrap.min.css"
+    },
+    {
+      "Id": "D:\\BarberApp3\\Hair.Client\\wwwroot\\bootstrap\\bootstrap.min.css.map",
+      "PackagePath": "staticwebassets\\bootstrap\\bootstrap.min.css.map"
+    },
+    {
+      "Id": "D:\\BarberApp3\\Hair.Client\\wwwroot\\favicon.png",
+      "PackagePath": "staticwebassets\\favicon.png"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.Hair.Client.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.Hair.Client.props",
+      "PackagePath": "build\\Hair.Client.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.Hair.Client.props",
+      "PackagePath": "buildMultiTargeting\\Hair.Client.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.Hair.Client.props",
+      "PackagePath": "buildTransitive\\Hair.Client.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
