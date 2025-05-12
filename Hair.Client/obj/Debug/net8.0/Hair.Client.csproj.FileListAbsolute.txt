@@ -104,3 +104,17 @@ D:\BarberApp3\Hair.Client\bin\Debug\net8.0\runtimes\browser\lib\net8.0\System.Te
 D:\BarberApp3\Hair.Client\bin\Debug\net8.0\Hair.Infrastructure.dll
 D:\BarberApp3\Hair.Client\bin\Debug\net8.0\Hair.Infrastructure.pdb
 D:\BarberApp3\Hair.Client\bin\Debug\net8.0\MudBlazor.dll
+D:\BarberApp3\Hair.Client\bin\Debug\net8.0\Hair.Api.deps.json
+D:\BarberApp3\Hair.Client\bin\Debug\net8.0\Hair.Api.runtimeconfig.json
+D:\BarberApp3\Hair.Client\bin\Debug\net8.0\Hair.Api.exe
+D:\BarberApp3\Hair.Client\bin\Debug\net8.0\Microsoft.AspNetCore.OpenApi.dll
+D:\BarberApp3\Hair.Client\bin\Debug\net8.0\Microsoft.OpenApi.dll
+D:\BarberApp3\Hair.Client\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
+D:\BarberApp3\Hair.Client\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+D:\BarberApp3\Hair.Client\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+D:\BarberApp3\Hair.Client\bin\Debug\net8.0\Hair.Api.dll
+D:\BarberApp3\Hair.Client\bin\Debug\net8.0\Hair.Api.pdb
+D:\BarberApp3\Hair.Client\bin\Debug\net8.0\Blazorise.dll
+D:\BarberApp3\Hair.Client\bin\Debug\net8.0\Blazorise.Licensing.dll
+D:\BarberApp3\Hair.Client\bin\Debug\net8.0\Blazorise.Bootstrap5.dll
+D:\BarberApp3\Hair.Client\bin\Debug\net8.0\Blazorise.Icons.FontAwesome.dll

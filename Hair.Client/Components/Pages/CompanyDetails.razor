@@ -1,12 +1,13 @@
 ﻿@page "/companies/{id:guid}"
 @using Hair.Application.Common.Dto.Schedule
 @using Hair.Application.Common.Dto.Barber
-@using Hair.Application.Common.Dto.Company
 @using Hair.Application.Common.Interfaces
 @using Hair.Application.Schedules.Queries
-@using Hair.Infrastructure.Services
 @using MediatR
-@using MudBlazor
+
+@using Color = Blazorise.Color
+
+@using Blazorise
 @inject ICompanyService CompanyService
 @inject IMediator Mediator
 
@@ -19,12 +20,12 @@
         @foreach (var barber in _barbers)
         {
             <li>
-                <h5>@barber.BarberName</h5>
+                <NavLink class="nav-link" href="@($"/{barber.BarberId}")">@barber.BarberName</NavLink>
                 <p><strong>Company: </strong> @barber.CompanyName</p>
                 
-                <MudButton OnClick="() => SelectedBarber(barber.BarberId)" Color="Color.Error">
+                <Button Color="Color.Info" Clicked="() => SelectedBarber(barber.BarberId)">
                     Check free appointments here!
-                </MudButton>
+                </Button>
             </li>
         }
     </ul>
@@ -34,22 +35,24 @@ else
     <p>There are no barbers available right now!</p>
 }
 
-<MudCard>
-    <MudCardContent>
-        <MudDatePicker PickerVariant="PickerVariant.Static" DateChanged="OnDateSelected" Rounded="true" Elevation="2"></MudDatePicker>
-    </MudCardContent>
-</MudCard>
+<Card>
+    <CardBody>
+        <DatePicker TValue="DateTime?" @bind-Date="_selectedDate" />
+        <DatePicker Date="@_selectedDate" DateChanged="@((DateTime? date) => OnDateSelected(date))"></DatePicker>
+        <DatePicker TValue="DateTime?" @bind-Date="_selectedDate" InputFormat="dd.MM.yyyy" DisplayFormat="dd.MM.yyyy" />
+    </CardBody>
+</Card>
 
 @if (_freeAppointments.Any())
 {
-    <MudList T="string">
+    <ListGroup>
         @foreach (var appointment in _freeAppointments)
         {
-            <MudListItem T="string">
-                <MudText>@appointment.dateAndTime.ToString("HH:mm:ss")</MudText>
-            </MudListItem>
+            <ListGroupItem>
+                <Text>@appointment.dateAndTime.ToString("HH:mm:ss")</Text>
+            </ListGroupItem>
         }
-    </MudList>
+    </ListGroup>
 }
 
 
@@ -61,12 +64,12 @@ else
 
 @code {
     [Parameter]
-    public Guid BarberId { get; set; }
-    private string _dateFormat = "dd.MM.yyyy";
+    public Guid berber { get; set; }
+    //private string _dateFormat = "dd.MM.yyyy";
     private DateTime? _selectedDate = DateTime.Today;
     private List<FreeAppointmentsCheckDto> _freeAppointments = new();
     private List<BarberFullDetailsDto> _barbers = new();
-    private string _bound = "not set";
+    //private string _bound = "not set";
     [Parameter] 
     public Guid Id { get; set; }
     
@@ -85,13 +88,8 @@ else
         if (newDate.HasValue)
         {
             _selectedDate = newDate;
+            await LoadFreeAppointments(berber);
         }
-        else
-        {
-            _selectedDate = DateTime.Today;
-        }
-
-        await LoadFreeAppointments(BarberId);
         StateHasChanged();
     }
 
@@ -104,8 +102,10 @@ else
 
     private async Task SelectedBarber(Guid barberId)
     {
-        BarberId = barberId;
-        await LoadFreeAppointments(BarberId);
+        berber = barberId;
+        Console.WriteLine("barber id je : " + berber);
+        
+        await LoadFreeAppointments(berber);
         StateHasChanged();
     }
     

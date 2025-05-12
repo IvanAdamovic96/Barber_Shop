@@ -17,7 +17,7 @@ namespace Hair.Api.Controllers;
 public class CompanyController(IHairDbContext dbContext): ApiBaseController
 {
     
-
+    /*
     [HttpPost("create")]
     public async Task<ActionResult<Company>> CreateCompanyAsync(CompanyCreateCommand company)
     {
@@ -31,6 +31,16 @@ public class CompanyController(IHairDbContext dbContext): ApiBaseController
             return BadRequest(new { Message = "Error", Data = ex.Message });
         }
     }
+    */
+
+    [HttpPost("create-company")]
+    public async Task<IActionResult> CreateCompany([FromForm] CompanyCreateRequestDto request)
+    {
+        var command = new CompanyCreateCommand(request.CompanyName, request.Image);
+        var result = await Mediator.Send(command);
+        return Ok(result);
+    }
+    
 
     [HttpGet("getCompanyById")]
     public async Task<ActionResult<Company>> GetCompanyAsync([FromQuery] CompanyDetailsQuery query)

@@ -11,7 +11,15 @@ using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
@@ -42,6 +50,8 @@ builder.Services.AddDbContext<ConnDbContext>((serviceProvider, options) =>
 */
 
 var app = builder.Build();
+app.UseStaticFiles();
+
 
 
 if (app.Environment.IsDevelopment())
@@ -52,5 +62,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.MapControllers();
+app.UseCors("AllowFrontend");
 
 app.Run();

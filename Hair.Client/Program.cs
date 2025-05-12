@@ -1,11 +1,14 @@
+using Blazorise;
+using Blazorise.Bootstrap5;
+using Blazorise.Icons.FontAwesome;
+using Hair.Application;
 using Hair.Application.Common.Interfaces;
 using Hair.Client.Components;
 using Hair.Infrastructure;
 using Hair.Infrastructure.Context;
 using Hair.Infrastructure.Services;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
-using MudBlazor.Services;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,15 +16,21 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IRequestHandler<,>).Assembly));
 
-builder.Services.AddMudServices();
+builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddBootstrapBlazor();
 builder.Services.AddScoped<ICompanyService, CompanyService>();
+builder.Services.AddScoped<IScheduleService, ScheduleService>();
+builder.Services.AddScoped<IBarberService, BarberService>();
 builder.Services.AddScoped<IHairDbContext, ConnDbContext>();
 builder.Services.AddDbContext<ConnDbContext>(options =>     
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+//builder.Services.AddMudServices();
+builder.Services.AddBlazorise(options => { options.Immediate = true; })
+    .AddBootstrap5Providers()
+    .AddFontAwesomeIcons();
 
+builder.Services.AddApplication();
 
 
 

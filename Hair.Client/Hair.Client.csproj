@@ -7,14 +7,19 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Hair.Api\Hair.Api.csproj" />
       <ProjectReference Include="..\Hair.Application\Hair.Application.csproj" />
       <ProjectReference Include="..\Hair.Infrastructure\Hair.Infrastructure.csproj" />
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Blazorise" Version="1.7.5" />
+      <PackageReference Include="Blazorise.Bootstrap5" Version="1.7.5" />
+      <PackageReference Include="Blazorise.Icons.FontAwesome" Version="1.7.5" />
       <PackageReference Include="BootstrapBlazor" Version="9.5.0" />
       <PackageReference Include="MediatR" Version="12.4.1" />
       <PackageReference Include="MudBlazor" Version="8.5.0" />
     </ItemGroup>
+	
 
 </Project>
