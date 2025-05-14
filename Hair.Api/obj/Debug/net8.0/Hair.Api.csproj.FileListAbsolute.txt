@@ -200,3 +200,4 @@ D:\BarberApp3\Hair.Api\bin\Debug\net8.0\Twilio.dll
 D:\BarberApp3\Hair.Api\bin\Debug\net8.0\Vonage.dll
 D:\BarberApp3\Hair.Api\bin\Debug\net8.0\Yoh.Text.Json.NamingPolicies.dll
 D:\BarberApp3\Hair.Api\bin\Debug\net8.0\runtimes\browser\lib\net8.0\System.Text.Encodings.Web.dll
+D:\BarberApp3\Hair.Api\bin\Debug\net8.0\Hair.Api.staticwebassets.runtime.json

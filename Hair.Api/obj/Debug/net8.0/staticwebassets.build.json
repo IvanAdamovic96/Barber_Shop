@@ -1,11 +1,77 @@
 {
   "Version": 1,
-  "Hash": "DpC2ZkLEfBbZ4HyxGUJpFqSCIw0GavU0JEqellRxC8I=",
+  "Hash": "smBviuhRt1oMrUmgsMtyWeXfvve/mKjj+b1q8Z0f3Vg=",
   "Source": "Hair.Api",
   "BasePath": "_content/Hair.Api",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
-  "Assets": []
+  "DiscoveryPatterns": [
+    {
+      "Name": "Hair.Api\\wwwroot",
+      "Source": "Hair.Api",
+      "ContentRoot": "D:\\BarberApp3\\Hair.Api\\wwwroot\\",
+      "BasePath": "_content/Hair.Api",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\007e0f49-f5ce-41b8-89ab-e1edea57293a.jpg",
+      "SourceId": "Hair.Api",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\BarberApp3\\Hair.Api\\wwwroot\\",
+      "BasePath": "_content/Hair.Api",
+      "RelativePath": "images/companies/007e0f49-f5ce-41b8-89ab-e1edea57293a.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\companies\\007e0f49-f5ce-41b8-89ab-e1edea57293a.jpg"
+    },
+    {
+      "Identity": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\25782a03-032a-40f1-99aa-f6d7c47bdebb.png",
+      "SourceId": "Hair.Api",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\BarberApp3\\Hair.Api\\wwwroot\\",
+      "BasePath": "_content/Hair.Api",
+      "RelativePath": "images/companies/25782a03-032a-40f1-99aa-f6d7c47bdebb.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\companies\\25782a03-032a-40f1-99aa-f6d7c47bdebb.png"
+    },
+    {
+      "Identity": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\3694560a-84fc-41fb-9881-c2274a71bac0.jpg",
+      "SourceId": "Hair.Api",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\BarberApp3\\Hair.Api\\wwwroot\\",
+      "BasePath": "_content/Hair.Api",
+      "RelativePath": "images/companies/3694560a-84fc-41fb-9881-c2274a71bac0.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\companies\\3694560a-84fc-41fb-9881-c2274a71bac0.jpg"
+    }
+  ]
 }

@@ -13,12 +13,12 @@ public class Company
     public Guid Id { get; private set; }
     public string CompanyName { get; private set; }
     
-    public string? ImageUrl { get; private set; }
+    public IList<string?> ImagesUrl { get; private set; }
     public IList<Barber> Barbers { get; set; } = new List<Barber>();
 
-    public Company AddImage(string imageUrl)
+    public Company AddImage(IList<string?> imageUrl)
     {
-        ImageUrl = imageUrl;
+        ImagesUrl = imageUrl;
         return this;
     }
 }

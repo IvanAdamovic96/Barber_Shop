@@ -34,20 +34,6 @@ builder.Services.AddScoped<IHairDbContext, ConnDbContext>();
 builder.Services.AddDbContext<ConnDbContext>(options =>     
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-/*
- builder.Services.Configure<PostgresDbConfiguration>(
-    builder.Configuration.GetSection("PostgresDbConfiguration"));
- 
-builder.Services.AddSingleton(resolver =>
-    resolver.GetRequiredService<IOptions<PostgresDbConfiguration>>().Value);
-var config = builder.Configuration.GetSection("PostgresDbConfiguration").Get<PostgresDbConfiguration>();
-Console.WriteLine($"DbHost from config: {config.GetConnectionString()}");
-builder.Services.AddDbContext<ConnDbContext>((serviceProvider, options) =>
-{
-    var postgresConfig = serviceProvider.GetRequiredService<IOptions<PostgresDbConfiguration>>().Value;
-    options.UseNpgsql(postgresConfig.GetConnectionString());
-});
-*/
 
 var app = builder.Build();
 app.UseStaticFiles();

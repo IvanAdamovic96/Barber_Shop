@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Net.Mime;
 using Hair.Application.Barbers.Queries;
 using Hair.Application.Common.Dto.Company;
 using Hair.Application.Common.Interfaces;
