@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Data;
 
 namespace Hair.Domain.Entities;
 
@@ -13,12 +14,18 @@ public class Company
     public Guid Id { get; private set; }
     public string CompanyName { get; private set; }
     
-    public IList<string?> ImagesUrl { get; private set; }
+    public IList<string?> ImageUrl { get; private set; }
     public IList<Barber> Barbers { get; set; } = new List<Barber>();
-
+    
+    public string? CompanyOwnerId { get; set; }
+    
+    [ForeignKey("CompanyOwnerId")]
+    public ApplicationUser Owner { get; set; }
+    
+    public IList<Haircuts> Haircuts { get; private set; } = new List<Haircuts>();
     public Company AddImage(IList<string?> imageUrl)
     {
-        ImagesUrl = imageUrl;
+        ImageUrl = imageUrl;
         return this;
     }
 }

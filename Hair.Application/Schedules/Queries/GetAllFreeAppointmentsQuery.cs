@@ -27,11 +27,11 @@ public class GetAllFreAppointmentsHandler(IHairDbContext dbContext) : IRequestHa
             .Where(x=> x.BarberId == request.BarberId)
             .FirstOrDefaultAsync(cancellationToken);
         
-        var startTime = request.SelectedDate.Date.AddHours(barberWorkTime.IndividualStartTime.Value.Hours)
-                                                 .AddMinutes(barberWorkTime.IndividualStartTime.Value.Minutes);
+        var startTime = request.SelectedDate.Date.AddHours(barberWorkTime.IndividualStartTime.Hours)
+                                                 .AddMinutes(barberWorkTime.IndividualStartTime.Minutes);
 
-        var endTime = request.SelectedDate.Date.AddHours(barberWorkTime.IndividualEndTime.Value.Hours)
-                                               .AddMinutes(barberWorkTime.IndividualEndTime.Value.Minutes);
+        var endTime = request.SelectedDate.Date.AddHours(barberWorkTime.IndividualEndTime.Hours)
+                                               .AddMinutes(barberWorkTime.IndividualEndTime.Minutes);
         
         
         var list = new List<DateTime>();

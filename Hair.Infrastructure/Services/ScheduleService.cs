@@ -30,22 +30,15 @@ public class ScheduleService(IHairDbContext dbContext,
             schedule.time.Kind 
         );
 
-       
-      /*  var occupiedAppointment = await dbContext.Appointments
-            .FirstOrDefaultAsync(x => x.Time == normalizedTime, cancellationToken);*/
         var x = await IsAppointmentAvailable(normalizedTime, cancellationToken);
         if (x)
         {
             throw new ValidationException("Schedule appointment already exists.");
         }
-      /*  bool checkEmail = barberService.IsValidEmail(schedule.email);
-        if (!checkEmail)
-        {
-            throw new ValidationException("Invalid email address.");
-        }*/
+
         try
         {
-            Customer customer = new Customer(
+            AnonymousUser customer = new AnonymousUser(
                 schedule.firstName,
                 schedule.lastName,
                 schedule.email,
@@ -68,9 +61,9 @@ public class ScheduleService(IHairDbContext dbContext,
             ));
             
           
-            await notificationService.SendSmsAsync(customer.PhoneNumber, "Zdravo");
+            //await notificationService.SendSmsAsync(customer.PhoneNumber, "Zdravo");
             
-            dbContext.Customers.Add(customer);
+            dbContext.AnonymousUser.Add(customer);
             dbContext.Appointments.Add(appointment);
             await dbContext.SaveChangesAsync(cancellationToken);
             return new ScheduleAppointmentCreateDto(customer.FirstName, customer.LastName, customer.Email,
@@ -78,8 +71,6 @@ public class ScheduleService(IHairDbContext dbContext,
         }
         catch (Exception ex)
         {
-            
-
             throw new Exception(ex.Message);
         }
     }
@@ -104,8 +95,8 @@ public class ScheduleService(IHairDbContext dbContext,
         var barber = await dbContext.Barbers.FirstOrDefaultAsync(x => x.BarberId == schedule.barberId, cancellationToken);
         if (barber == null) return false;
 
-        var start = barber.IndividualStartTime.Value;
-        var end = barber.IndividualEndTime.Value;
+        var start = barber.IndividualStartTime;
+        var end = barber.IndividualEndTime;
         return schedule.time.TimeOfDay >= start && schedule.time.TimeOfDay < end;
     }
 

@@ -36,13 +36,10 @@ public class CompanyService (IHairDbContext dbContext) : ICompanyService
             {
                 await images[i].CopyToAsync(stream);
             }
-            var fullUrl = $"http://localhost:5045/images/companies/{uniqueFileName}"; // Change localhost:5000 if necessary
+            var fullUrl = $"http://localhost:5045/images/companies/{uniqueFileName}";
             urls.Add(fullUrl);
-            //return fullUrl;
         }
         
-        //var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(images.FileName);
-        // Return full URL path
         return urls;
     }
     
@@ -59,9 +56,10 @@ public class CompanyService (IHairDbContext dbContext) : ICompanyService
         }
 
         IList<string?> imageUrl = null;
+        
         for (int i = 0; i < image.Count; i++)
         {
-            if (image != null)
+            if (image is not null)
             {
                 imageUrl = await UploadImageAsync(image);
             }
@@ -70,11 +68,9 @@ public class CompanyService (IHairDbContext dbContext) : ICompanyService
         Company company = new Company(companyName);
         company.AddImage(imageUrl);
         
-        //var companySaved = companyCreate.FromCreateDtoToEntity();
-        
         dbContext.Companies.Add(company);
         await dbContext.SaveChangesAsync(cancellationToken);
-        return new CompanyCreateDto(company.CompanyName, company.ImagesUrl);
+        return new CompanyCreateDto(company.CompanyName, company.ImageUrl);
     }
     
     
@@ -96,8 +92,6 @@ public class CompanyService (IHairDbContext dbContext) : ICompanyService
 
         return barbers.Select(barber =>
             new BarberFullDetailsDto(barber.BarberId, barber.BarberName, barber.Company.CompanyName)).ToList();
-
-        //return barbers.Select(barber => new BarberDetailsDto(barber.BarberName, barber.Company?.CompanyName ?? "No company")).ToList();
     }
 
     
@@ -112,8 +106,15 @@ public class CompanyService (IHairDbContext dbContext) : ICompanyService
         {
             CompanyId = x.Id,
             CompanyName = x.CompanyName,
-            ImageUrl = x.ImagesUrl
+            ImageUrl = x.ImageUrl
         }).ToList();
         return result;
+    }
+
+    public async Task<CompanyDetailsDto> GetCompanyDetailsById(Guid CompanyId, CancellationToken cancellationToken)
+    {
+        var company = await dbContext.Companies.Where(c => c.Id == CompanyId).FirstOrDefaultAsync(cancellationToken);
+        var toReturnCompanyDetails = new CompanyDetailsDto(company.Id, company.CompanyName, company.ImageUrl);
+        return toReturnCompanyDetails;
     }
 }

@@ -17,6 +17,35 @@ namespace Hair.Api.Controllers;
 [Route("company")]
 public class CompanyController(IHairDbContext dbContext): ApiBaseController
 {
+    [HttpPost("create-company")]
+    public async Task<IActionResult> CreateCompany([FromForm] CompanyCreateRequestDto request)
+    {
+        var command = new CompanyCreateCommand(request.CompanyName, request.Image);
+        var result = await Mediator.Send(command);
+        return Ok(result);
+    }
+   
+
+    [HttpGet("getCompanyById")]
+    public async Task<ActionResult<Company>> GetCompanyAsync([FromQuery] CompanyDetailsQuery query)
+    {
+        return Ok(await Mediator.Send(query));
+    }
+
+    [HttpGet("getAllCompanies")]
+    public async Task<ActionResult<List<Company>>> GetAllCompaniesAsync()
+    {
+        return Ok(await Mediator.Send(new GetAllCompaniesQuery(CompanyDetailsDto: new CompanyDetailsDto())));
+    }
+    
+    [HttpGet("getCompanyDetailsById")]
+    public async Task<ActionResult<Company>> GetCompanyDetailsByIdAsync([FromQuery] CompanyDetailsByIdQuery query)
+    {
+        return Ok(await Mediator.Send(query));
+    }
+    
+    
+    
     
     /*
     [HttpPost("create")]
@@ -33,25 +62,4 @@ public class CompanyController(IHairDbContext dbContext): ApiBaseController
         }
     }
     */
-
-    [HttpPost("create-company")]
-    public async Task<IActionResult> CreateCompany([FromForm] CompanyCreateRequestDto request)
-    {
-        var command = new CompanyCreateCommand(request.CompanyName, request.Image);
-        var result = await Mediator.Send(command);
-        return Ok(result);
-    }
-    
-
-    [HttpGet("getCompanyById")]
-    public async Task<ActionResult<Company>> GetCompanyAsync([FromQuery] CompanyDetailsQuery query)
-    {
-        return Ok(await Mediator.Send(query));
-    }
-
-    [HttpGet("getAllCompanies")]
-    public async Task<ActionResult<List<Company>>> GetAllCompaniesAsync()
-    {
-        return Ok(await Mediator.Send(new GetAllCompaniesQuery(CompanyDetailsDto: new CompanyDetailsDto())));
-    }
 }

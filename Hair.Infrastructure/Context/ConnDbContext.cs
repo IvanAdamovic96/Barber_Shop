@@ -8,12 +8,37 @@ using Microsoft.Extensions.Options;
 
 namespace Hair.Infrastructure.Context;
 
-public class ConnDbContext : DbContext,IHairDbContext
+public class ConnDbContext : IdentityDbContext<ApplicationUser>, IHairDbContext
 {
-    //private readonly string _connectionString;
-
     public ConnDbContext(DbContextOptions<ConnDbContext> options) : base(options) { }
+    public ConnDbContext() {}
+
+    public DbSet<Company> Companies { get; set; }
+    public DbSet<Barber> Barbers { get; set; }
+    public DbSet<Haircuts> Haircuts { get; set; }
+    public DbSet<Appointment> Appointments { get; set; }
+    public DbSet<AnonymousUser> AnonymousUser { get; set; }
+
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
+    {
+        var result = await base.SaveChangesAsync(cancellationToken);
+
+        return result;
+    }
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    //private readonly string _connectionString;
     
     /*
     public ConnDbContext(DbContextOptions<ConnDbContext> options, IOptions<PostgresDbConfiguration> postgresConfig): base(options)
@@ -35,13 +60,10 @@ public class ConnDbContext : DbContext,IHairDbContext
         _connectionString = config.GetConnectionString();
         Console.WriteLine($"Using Connection String: {_connectionString}");
     }*/
-
-
-    public ConnDbContext()
-    {
-        
-    }
-
+    
+    
+    
+    
     /*
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -49,21 +71,7 @@ public class ConnDbContext : DbContext,IHairDbContext
         {
             optionsBuilder.UseNpgsql(_connectionString);
         }
-    } 
-    */
-      //  => optionsBuilder.UseNpgsql("Host=localhost;Username=postgres;Password=ivan");
-
-
-    public DbSet<Company> Companies { get; set; }
-    public DbSet<Barber> Barbers { get; set; }
-
-    public DbSet<Appointment> Appointments { get; set; }
-    public DbSet<Customer> Customers { get; set; }
-
-    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
-    {
-        var result = await base.SaveChangesAsync(cancellationToken);
-
-        return result;
     }
+    */
+    //  => optionsBuilder.UseNpgsql("Host=localhost;Username=postgres;Password=ivan");
 }

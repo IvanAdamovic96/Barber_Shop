@@ -36,7 +36,8 @@ public class BarberService (IHairDbContext dbContext) : IBarberService
         var barberSaved = barberCreateDto.FromCreateDtoToEntityBarber().AddBarberCompany(company);
         dbContext.Barbers.Add(barberSaved);
         await dbContext.SaveChangesAsync(cancellationToken);
-        return new BarberCreateDto(barberSaved.BarberId,barber.BarberName, barber.PhoneNumber, barber.Email, barber.IndividualStartTime, barber.IndividualEndTime);
+        return new BarberCreateDto(barberSaved.BarberId,barber.BarberName, barber.PhoneNumber,
+                                barber.Email, barber.IndividualStartTime, barber.IndividualEndTime);
     }
     
     
@@ -44,17 +45,13 @@ public class BarberService (IHairDbContext dbContext) : IBarberService
     public async Task<List<BarberDetailsDto>> GetAllBarbersAsync(Guid companyId, CancellationToken cancellationToken)
     {
         var barbers = await dbContext.Barbers.Where(x => x.Company.Id == companyId)
-            .Select(x=> new BarberDetailsDto(x.BarberName, x.Company.CompanyName))
+            .Select(x=> new BarberDetailsDto(x.BarberId, x.BarberName, x.Company.CompanyName))
             .ToListAsync();
 
         return barbers;
     }
 
-    
-    
-    
-    
-    
+
     
     
     
