@@ -5,14 +5,14 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Hair.Infrastructure.Services;
 
-public class AdminSeederService(UserManager<ApplicationUser> userManager) : IAdminSeederService
+public class AdminSeederService(UserManager<ApplicationUser> _userManager) : IAdminSeederService
 {
     public async Task SeedAdminAsync()
     {
         var adminEmail = "admin@gmail.com";
         var adminPassword = "Admin@123";
         
-        var adminUser = await userManager.FindByEmailAsync(adminEmail);
+        var adminUser = await _userManager.FindByEmailAsync(adminEmail);
         if (adminUser == null)
         {
             adminUser = new ApplicationUser
@@ -25,7 +25,7 @@ public class AdminSeederService(UserManager<ApplicationUser> userManager) : IAdm
                 LastName = "Admin",
             };
             
-            var result = await userManager.CreateAsync(adminUser, adminPassword);
+            var result = await _userManager.CreateAsync(adminUser, adminPassword);
             if (!result.Succeeded)
             {
                 throw new Exception("Admin kreiranje nije uspelo: " + string.Join(", ", result.Errors.Select(e => e.Description)));

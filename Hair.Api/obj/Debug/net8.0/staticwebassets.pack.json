@@ -85,6 +85,10 @@
       "PackagePath": "staticwebassets\\images\\companies\\f10c5d1c-93a2-4d98-9140-417c2ec0012f.png"
     },
     {
+      "Id": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\f96f4d5d-f3e2-46f4-9fdd-edd8de7f7a8a.jpg",
+      "PackagePath": "staticwebassets\\images\\companies\\f96f4d5d-f3e2-46f4-9fdd-edd8de7f7a8a.jpg"
+    },
+    {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.Hair.Api.Microsoft.AspNetCore.StaticWebAssets.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
     },

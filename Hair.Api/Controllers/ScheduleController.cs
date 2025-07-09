@@ -54,7 +54,7 @@ public class ScheduleController: ApiBaseController
     }
     
     [HttpPost ("CreateAppointment")]
-    public async Task<ActionResult<Appointment>> CreateAppointmentAsync(ScheduleAppointmentCommand command)
+    public async Task<ActionResult<Appointment>> CreateAppointmentAsync([FromForm] ScheduleAppointmentCommand command)
     {
         try
         {

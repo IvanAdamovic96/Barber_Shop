@@ -6,12 +6,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Hair.Application.Schedules.Commands;
 
-public record ScheduleAppointmentCommand(ScheduleAppointmentCreateDto Schedule): IRequest<ScheduleAppointmentCreateDto?>;
+public record ScheduleAppointmentCommand(ScheduleAppointmentCreateDto Schedule): IRequest<ScheduleAppointmentResponseDto?>;
 
 public class ScheduleAppointmentCommandHandler(IScheduleService scheduleService)
-    : IRequestHandler<ScheduleAppointmentCommand, ScheduleAppointmentCreateDto?>
+    : IRequestHandler<ScheduleAppointmentCommand, ScheduleAppointmentResponseDto?>
 {
-    public async Task<ScheduleAppointmentCreateDto?> Handle(ScheduleAppointmentCommand request,
+    public async Task<ScheduleAppointmentResponseDto?> Handle(ScheduleAppointmentCommand request,
         CancellationToken cancellationToken)
     {
         var x = await scheduleService.CreateScheduleAppointmentAsync(request.Schedule, cancellationToken);

@@ -206,7 +206,7 @@ namespace Hair.Infrastructure.Migrations
                     b.ToTable("Companies");
                 });
 
-            modelBuilder.Entity("Hair.Domain.Entities.Haircuts", b =>
+            modelBuilder.Entity("Hair.Domain.Entities.Haircut", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -384,7 +384,7 @@ namespace Hair.Infrastructure.Migrations
                     b.Navigation("Owner");
                 });
 
-            modelBuilder.Entity("Hair.Domain.Entities.Haircuts", b =>
+            modelBuilder.Entity("Hair.Domain.Entities.Haircut", b =>
                 {
                     b.HasOne("Hair.Domain.Entities.Company", "Company")
                         .WithMany("Haircuts")

@@ -3,9 +3,13 @@ using FluentValidation.AspNetCore;
 using Hair.Api.Filters;
 using Hair.Application;
 using Hair.Application.Common.Interfaces;
+using Hair.Domain.Entities;
 using Hair.Infrastructure;
 using Hair.Infrastructure.Configuration;
 using Hair.Infrastructure.Context;
+using Hair.Infrastructure.Services;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -35,10 +39,41 @@ builder.Services.AddDbContext<ConnDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<ConnDbContext>()
+    .AddDefaultTokenProviders();
+
+
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var adminSeeder = scope.ServiceProvider.GetRequiredService<IAdminSeederService>();
+    await adminSeeder.SeedAdminAsync();
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    await AdminSeederService.SeedRoleAsync(roleManager);
+}
+
+
+app.UseExceptionHandler(errorApp =>
+{
+    errorApp.Run(async context =>
+    {
+        context.Response.StatusCode = 500;
+        context.Response.ContentType = "application/json";
+
+        var error = context.Features.Get<IExceptionHandlerFeature>();
+        if (error != null)
+        {
+            var err = new { message = error.Error.Message };
+            await context.Response.WriteAsJsonAsync(err);
+        }
+    });
+});
+
+
+
 app.UseStaticFiles();
-
-
 
 if (app.Environment.IsDevelopment())
 {

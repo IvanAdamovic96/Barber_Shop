@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Hair.Infrastructure.Migrations
 {
     [DbContext(typeof(ConnDbContext))]
-    [Migration("20250708091524_FirstBarberMigration")]
-    partial class FirstBarberMigration
+    [Migration("20250709074620_HaircutsMigration")]
+    partial class HaircutsMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -209,7 +209,7 @@ namespace Hair.Infrastructure.Migrations
                     b.ToTable("Companies");
                 });
 
-            modelBuilder.Entity("Hair.Domain.Entities.Haircuts", b =>
+            modelBuilder.Entity("Hair.Domain.Entities.Haircut", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -387,7 +387,7 @@ namespace Hair.Infrastructure.Migrations
                     b.Navigation("Owner");
                 });
 
-            modelBuilder.Entity("Hair.Domain.Entities.Haircuts", b =>
+            modelBuilder.Entity("Hair.Domain.Entities.Haircut", b =>
                 {
                     b.HasOne("Hair.Domain.Entities.Company", "Company")
                         .WithMany("Haircuts")

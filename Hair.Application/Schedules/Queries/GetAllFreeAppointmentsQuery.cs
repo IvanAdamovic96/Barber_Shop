@@ -10,10 +10,15 @@ namespace Hair.Application.Schedules.Queries;
 
 public record GetAllFreeAppointmentsQuery(DateTime SelectedDate, Guid BarberId): IRequest<List<FreeAppointmentsCheckDto>>;
 
-public class GetAllFreAppointmentsHandler(IHairDbContext dbContext) : IRequestHandler<GetAllFreeAppointmentsQuery, List<FreeAppointmentsCheckDto>>
+public class GetAllFreAppointmentsHandler(IHairDbContext dbContext, IScheduleService scheduleService) : IRequestHandler<GetAllFreeAppointmentsQuery, List<FreeAppointmentsCheckDto>>
 {
     public async Task<List<FreeAppointmentsCheckDto>> Handle(GetAllFreeAppointmentsQuery request, CancellationToken cancellationToken)
     {
+        var freeappointments = await scheduleService.GetAllFreeAppointmentsAsync(request.SelectedDate, 
+            request.BarberId, cancellationToken);
+
+        return freeappointments;
+        /*
         var occupiedAppointments = await dbContext.Appointments
             .Where(x => x.Time.Date == request.SelectedDate.Date && x.Barberid == request.BarberId)
             .ToListAsync(cancellationToken);
@@ -46,6 +51,6 @@ public class GetAllFreAppointmentsHandler(IHairDbContext dbContext) : IRequestHa
         var list2 = list.Select(time => new FreeAppointmentsCheckDto(request.BarberId, time)).ToList();
 
         return list2;
-
+    */
     }
 }
