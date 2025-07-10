@@ -8,6 +8,7 @@ using Hair.Application.Companies.Commands;
 using Hair.Application.Companies.Queries;
 using Hair.Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hair.Api.Controllers;
@@ -47,7 +48,16 @@ public class CompanyController(IHairDbContext dbContext): ApiBaseController
     [HttpPost("create-haircut")]
     public async Task<IActionResult> CreateHaircutAsync([FromForm] CreateHaircutCommand command)
     {
-        return Ok(await Mediator.Send(command));
+        try
+        {
+            var result = await Mediator.Send(command);
+            return Ok(new { Message = result });
+        }
+        catch (Exception e)
+        {
+            return BadRequest(new { Message = e });
+        }
+        
     }
 
     [HttpGet("get-all-haircuts-by-companyid")]
@@ -55,22 +65,4 @@ public class CompanyController(IHairDbContext dbContext): ApiBaseController
     {
         return Ok(await Mediator.Send(query));
     }
-    
-    
-    
-    /*
-    [HttpPost("create")]
-    public async Task<ActionResult<Company>> CreateCompanyAsync(CompanyCreateCommand company)
-    {
-        try
-        {
-            var result = await Mediator.Send(company);
-            return Ok(new { Message = "Company created", Data = result });
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { Message = "Error", Data = ex.Message });
-        }
-    }
-    */
 }

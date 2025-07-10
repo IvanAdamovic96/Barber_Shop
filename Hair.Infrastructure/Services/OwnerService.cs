@@ -7,14 +7,21 @@ namespace Hair.Infrastructure.Services;
 
 public class OwnerService(IHairDbContext dbContext) : IOwnerService
 {
-    public async Task<HaircutDto> CreateHaircutByOwner(HaircutDto haircutDto, CancellationToken cancellationToken)
+    public async Task<string> CreateHaircutByOwner(HaircutDto haircutDto, CancellationToken cancellationToken)
     {
-        var newHaircut = new Haircut(haircutDto.Duration,haircutDto.HaircutType,haircutDto.Price);
-
-        var company = await dbContext.Companies.Where(x => x.Id == haircutDto.CompanyId).FirstOrDefaultAsync();
-        newHaircut.AddCompanyCompany(company);
-        dbContext.Haircuts.Add(newHaircut);
-        await dbContext.SaveChangesAsync(cancellationToken);
-        return new HaircutDto(haircutDto.HaircutType, haircutDto.Price, haircutDto.Duration, haircutDto.CompanyId);
+        try
+        {
+            var newHaircut = new Haircut(haircutDto.Duration,haircutDto.HaircutType,haircutDto.Price);
+            var company = await dbContext.Companies.Where(x => x.Id == haircutDto.CompanyId).FirstOrDefaultAsync();
+            newHaircut.AddCompanyCompany(company);
+            dbContext.Haircuts.Add(newHaircut);
+            await dbContext.SaveChangesAsync(cancellationToken);
+            return "Successfully created haircut";
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw new Exception("Failed to create haircut", e);
+        }
     }
 }

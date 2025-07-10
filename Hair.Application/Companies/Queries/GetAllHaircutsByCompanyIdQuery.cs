@@ -5,14 +5,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Hair.Application.Companies.Queries;
 
-public record GetAllHaircutsByCompanyIdQuery(Guid CompanyId) : IRequest<List<HaircutDto>>;
+public record GetAllHaircutsByCompanyIdQuery(Guid CompanyId) : IRequest<List<HaircutResponseDto>>;
 
-public class GetAllHaircutsByCompanyIdQueryHandler(IHairDbContext dbContext) : IRequestHandler<GetAllHaircutsByCompanyIdQuery, List<HaircutDto>>
+public class GetAllHaircutsByCompanyIdQueryHandler(IHairDbContext dbContext) : IRequestHandler<GetAllHaircutsByCompanyIdQuery, List<HaircutResponseDto>>
 {
-    public async Task<List<HaircutDto>> Handle(GetAllHaircutsByCompanyIdQuery request, CancellationToken cancellationToken)
+    public async Task<List<HaircutResponseDto>> Handle(GetAllHaircutsByCompanyIdQuery request, CancellationToken cancellationToken)
     {
         var haircuts = await dbContext.Haircuts.Where(c => c.CompanyId == request.CompanyId).ToListAsync();
-        var response = haircuts.Select(h => new HaircutDto(
+        var response = haircuts.Select(h => new HaircutResponseDto(
+            HaircutId: h.Id,
             HaircutType: h.HaircutType,
             Price: h.Price,
             Duration: h.Duration,

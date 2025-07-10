@@ -4,7 +4,7 @@ namespace Hair.Application.Common.Interfaces;
 
 public interface IAuthService
 {
-    Task<AuthLevelDto> Login(LoginDto loginDto, CancellationToken cancellationToken);
+    Task<AuthResponseDto> Login(LoginDto loginDto, CancellationToken cancellationToken);
     
     Task<AuthLevelDto> RegisterAsync(RegisterDto registerDto, CancellationToken cancellationToken);
 

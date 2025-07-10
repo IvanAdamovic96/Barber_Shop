@@ -10,7 +10,7 @@ namespace Hair.Infrastructure.Services;
 public class AuthService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IHairDbContext dbContext)
     : IAuthService
 {
-    public async Task<AuthLevelDto> Login(LoginDto loginDto, CancellationToken cancellationToken)
+    public async Task<AuthResponseDto> Login(LoginDto loginDto, CancellationToken cancellationToken)
     {
         var user = await userManager.FindByEmailAsync(loginDto.Email);
         if (user == null || user.Email != loginDto.Email)
@@ -30,7 +30,7 @@ public class AuthService(UserManager<ApplicationUser> userManager, SignInManager
          }*/
         var roleName = Enum.GetName(typeof(Role), user.Role);
         var result = await signInManager.PasswordSignInAsync(user, loginDto.Password, isPersistent: false, lockoutOnFailure: false);
-        return new AuthLevelDto(user.Email,roleName);
+        return new AuthResponseDto(user.Email, roleName, user.CompanyId);
     }
 
     public async Task<AuthLevelDto> RegisterAsync(RegisterDto registerDto, CancellationToken cancellationToken)

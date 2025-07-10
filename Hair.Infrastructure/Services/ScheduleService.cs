@@ -48,28 +48,25 @@ public class ScheduleService(IHairDbContext dbContext,
         var freeTimes = allFreeAppointments.Select(dto => dto.dateAndTime).ToHashSet();
         List<DateTime> bookedAppointmentsTimes = new List<DateTime>();
         bool foundConsecutiveSlots = false;
-        
         DateTime currentCheckTime = normalizedTime;
+        
         if (!freeTimes.Contains(currentCheckTime))
         {
             throw new ValidationException("The requested start time is not available.");
         }
-        bookedAppointmentsTimes.Add(currentCheckTime);
         
-        /*
-        var test = new List<DateTime>();
-        bool hasAllSlots = true;
-        var requiredTimes = new List<DateTime>();
-        */
+        bookedAppointmentsTimes.Add(currentCheckTime);
+
         for (int i = 1; i < requiredSlots; i++)
         {
             currentCheckTime = normalizedTime.AddMinutes(i * 30);
+            /*
             var barber = await dbContext.Barbers.FirstOrDefaultAsync(x=> x.BarberId == schedule.barberId, cancellationToken);
             if (barber == null)
             {
                 throw new ValidationException("Barber not found for work hour check.");
             }
-
+            */
             if (!freeTimes.Contains(currentCheckTime))
             {
                 foundConsecutiveSlots = false;
@@ -77,30 +74,13 @@ public class ScheduleService(IHairDbContext dbContext,
             }
             bookedAppointmentsTimes.Add(currentCheckTime);
             foundConsecutiveSlots = true;
-            /*
-            var checkTime = schedule.time.AddMinutes(i * 30);
-            requiredTimes.Add(checkTime);
-
-            if (freeTimes.Contains(checkTime))
-            {
-                test.Add(checkTime);
-            }
-            */
         }
 
-        if (!foundConsecutiveSlots || bookedAppointmentsTimes.Count != requiredSlots)
+        if (!foundConsecutiveSlots && bookedAppointmentsTimes.Count != requiredSlots)
         {
             throw new ValidationException($"Not enough consecutive appointments available for " +
                                           $"a {haircutDuration}-minute haircut starting at {normalizedTime:HH:mm}.");
         }
-
-        /*
-        if (!hasAllSlots)
-        {
-            throw new ValidationException("Schedule appointment doesn't have enough slots.");
-        }
-        */
-        
 
         try
         {
@@ -119,23 +99,6 @@ public class ScheduleService(IHairDbContext dbContext,
                 dbContext.Appointments.Add(appointment);
             }
             
-            /*
-            Appointment appointment = new Appointment(schedule.time,schedule.barberId);
-            appointment.SetHaircutName(haircut.HaircutType);
-
-            appointment.SetTime(new DateTime(
-                appointment.Time.Year,
-                appointment.Time.Month,
-                appointment.Time.Day,
-                appointment.Time.Hour,
-                appointment.Time.Minute,
-                0, // Seconds set to 0
-                0, // Milliseconds set to 0
-                DateTimeKind.Utc
-            ));
-            */
-            
-            //dbContext.Appointments.Add(appointment);
             await dbContext.SaveChangesAsync(cancellationToken);
             return new ScheduleAppointmentResponseDto(anonymousUser.FirstName, anonymousUser.LastName, anonymousUser.Email,
                 anonymousUser.PhoneNumber, bookedAppointmentsTimes[0], schedule.barberId, haircut.HaircutType);
