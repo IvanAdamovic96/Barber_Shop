@@ -15,10 +15,11 @@ public class ConnDbContext : IdentityDbContext<ApplicationUser>, IHairDbContext
 
     public DbSet<Company> Companies { get; set; }
     public DbSet<Barber> Barbers { get; set; }
-    
     public DbSet<Haircut> Haircuts { get; set; }
     public DbSet<Appointment> Appointments { get; set; }
     public DbSet<AnonymousUser> AnonymousUser { get; set; }
+    
+    public DbSet<ApplicationUserCompany> ApplicationUserCompany { get; set; }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
     {
@@ -27,52 +28,9 @@ public class ConnDbContext : IdentityDbContext<ApplicationUser>, IHairDbContext
         return result;
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    //private readonly string _connectionString;
-    
-    /*
-    public ConnDbContext(DbContextOptions<ConnDbContext> options, IOptions<PostgresDbConfiguration> postgresConfig): base(options)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        _connectionString = postgresConfig.Value.ConnectionString;
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ConnDbContext).Assembly);
     }
-
-
-    public ConnDbContext(DbContextOptions<ConnDbContext> options, IOptions<PostgresDbConfiguration> postgresConfig)
-        : base(options)
-    {
-        var config = postgresConfig.Value;
-
-        if (string.IsNullOrEmpty(config.DbHost))
-        {
-            throw new ArgumentException("Database Host is not set in the configuration.");
-        }
-
-        _connectionString = config.GetConnectionString();
-        Console.WriteLine($"Using Connection String: {_connectionString}");
-    }*/
-    
-    
-    
-    
-    /*
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        if (!optionsBuilder.IsConfigured)
-        {
-            optionsBuilder.UseNpgsql(_connectionString);
-        }
-    }
-    */
-    //  => optionsBuilder.UseNpgsql("Host=localhost;Username=postgres;Password=ivan");
 }

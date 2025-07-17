@@ -1,4 +1,5 @@
 ﻿using Hair.Application.Common.Dto.Auth;
+using Hair.Application.Common.Dto.Company;
 
 namespace Hair.Application.Common.Interfaces;
 
@@ -12,4 +13,7 @@ public interface IAuthService
         CancellationToken cancellationToken);
 
     Task<bool> CheckIfCompanyOwnerExistsAsync(Guid companyId, CancellationToken cancellationToken);
+    
+    Task<AssignCompanyOwnerDto> AssignCompanyOwnerAsync(AssignCompanyOwnerDto assignCompanyOwnerDto,
+        CancellationToken cancellationToken);
 }

@@ -28,7 +28,7 @@ namespace Hair.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Appointments",
+                name: "Appointment",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -38,7 +38,7 @@ namespace Hair.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Appointments", x => x.Id);
+                    table.PrimaryKey("PK_Appointment", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -61,7 +61,6 @@ namespace Hair.Infrastructure.Migrations
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
                     Role = table.Column<int>(type: "integer", nullable: false),
-                    CompanyId = table.Column<Guid>(type: "uuid", nullable: true),
                     FirstName = table.Column<string>(type: "text", nullable: false),
                     LastName = table.Column<string>(type: "text", nullable: false),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -82,6 +81,19 @@ namespace Hair.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Company",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    CompanyName = table.Column<string>(type: "text", nullable: false),
+                    ImageUrl = table.Column<string[]>(type: "text[]", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Company", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -191,22 +203,28 @@ namespace Hair.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Companies",
+                name: "ApplicationUserCompany",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    CompanyName = table.Column<string>(type: "text", nullable: false),
-                    ImageUrl = table.Column<string[]>(type: "text[]", nullable: false),
-                    CompanyOwnerId = table.Column<string>(type: "text", nullable: true)
+                    ApplicationUserId = table.Column<string>(type: "text", nullable: false),
+                    CompanyId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Companies", x => x.Id);
+                    table.PrimaryKey("PK_ApplicationUserCompany", x => new { x.ApplicationUserId, x.CompanyId });
                     table.ForeignKey(
-                        name: "FK_Companies_AspNetUsers_CompanyOwnerId",
-                        column: x => x.CompanyOwnerId,
+                        name: "FK_ApplicationUserCompany_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ApplicationUserCompany_Company_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Company",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -220,15 +238,22 @@ namespace Hair.Infrastructure.Migrations
                     Email = table.Column<string>(type: "text", nullable: false),
                     CompanyId = table.Column<Guid>(type: "uuid", nullable: false),
                     IndividualStartTime = table.Column<TimeSpan>(type: "interval", nullable: false),
-                    IndividualEndTime = table.Column<TimeSpan>(type: "interval", nullable: false)
+                    IndividualEndTime = table.Column<TimeSpan>(type: "interval", nullable: false),
+                    ApplicationUserId = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Barbers", x => x.BarberId);
                     table.ForeignKey(
-                        name: "FK_Barbers_Companies_CompanyId",
+                        name: "FK_Barbers_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Barbers_Company_CompanyId",
                         column: x => x.CompanyId,
-                        principalTable: "Companies",
+                        principalTable: "Company",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -247,12 +272,17 @@ namespace Hair.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Haircuts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Haircuts_Companies_CompanyId",
+                        name: "FK_Haircuts_Company_CompanyId",
                         column: x => x.CompanyId,
-                        principalTable: "Companies",
+                        principalTable: "Company",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ApplicationUserCompany_CompanyId",
+                table: "ApplicationUserCompany",
+                column: "CompanyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -292,14 +322,21 @@ namespace Hair.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Barbers_ApplicationUserId",
+                table: "Barbers",
+                column: "ApplicationUserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Barbers_CompanyId",
                 table: "Barbers",
                 column: "CompanyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Companies_CompanyOwnerId",
-                table: "Companies",
-                column: "CompanyOwnerId");
+                name: "IX_Company_CompanyName",
+                table: "Company",
+                column: "CompanyName",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Haircuts_CompanyId",
@@ -314,7 +351,10 @@ namespace Hair.Infrastructure.Migrations
                 name: "AnonymousUser");
 
             migrationBuilder.DropTable(
-                name: "Appointments");
+                name: "ApplicationUserCompany");
+
+            migrationBuilder.DropTable(
+                name: "Appointment");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -341,10 +381,10 @@ namespace Hair.Infrastructure.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Companies");
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Company");
         }
     }
 }

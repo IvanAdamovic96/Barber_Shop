@@ -26,18 +26,13 @@ public class Barber
     public Role Role { get; set; }
     //public string PictureUrl { get; private set; } // dodati
     public string Email { get; private set; }
-    
-    /*
-    public string? Code { get; private set; }
-    
-    public bool? Verified { get; set; } 
-    
-    public DateTime? CodeExpiry { get; set; }
-    */
     public Company Company { get; private set; }
     public TimeSpan IndividualStartTime { get; private set; } 
     public TimeSpan IndividualEndTime { get; private set; }   
     
+    public string ApplicationUserId { get; private set; }
+    
+    public virtual ApplicationUser ApplicationUser { get; private set; }
     
 
     public Barber AddBarberCompany(Company company)
@@ -46,5 +41,9 @@ public class Barber
         return this;
     }
 
+    public void SetApplicationUserId(string userId)
+    {
+        ApplicationUserId = userId;
+    }
 
 }

@@ -12,11 +12,13 @@ public class CompanyConfiguration : IEntityTypeConfiguration<Company>
         builder.HasIndex(x => x.CompanyName).IsUnique();
         //builder.Property(x => x.Id).ValueGeneratedNever();
 
+        /*
         builder.HasOne(c => c.Owner)
             .WithMany(o => o.Companies)
             .HasForeignKey(c => c.CompanyOwnerId)
             .IsRequired(false)
             .OnDelete(DeleteBehavior.Restrict);
+        */
 
     }
 }

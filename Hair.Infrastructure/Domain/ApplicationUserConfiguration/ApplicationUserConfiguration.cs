@@ -8,6 +8,11 @@ public class ApplicationUserConfiguration : IEntityTypeConfiguration<Application
 {
     public void Configure(EntityTypeBuilder<ApplicationUser> builder)
     {
+        builder.HasOne(a => a.Barber)
+            .WithOne(b => b.ApplicationUser)
+            .HasForeignKey<Barber>(b => b.ApplicationUserId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
         /*
         builder.HasMany(c => c.Companies)
             .WithOne(u => u.Owner)

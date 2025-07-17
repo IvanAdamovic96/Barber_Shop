@@ -1,92 +1,28 @@
 {
   "Files": [
     {
-      "Id": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\007e0f49-f5ce-41b8-89ab-e1edea57293a.jpg",
-      "PackagePath": "staticwebassets\\images\\companies\\007e0f49-f5ce-41b8-89ab-e1edea57293a.jpg"
+      "Id": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\3dd7ae8d-99e3-41b9-b771-3e97b0710d2e.jpg",
+      "PackagePath": "staticwebassets\\images\\companies\\3dd7ae8d-99e3-41b9-b771-3e97b0710d2e.jpg"
     },
     {
-      "Id": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\01b10643-4f14-4cd9-a794-9f52f137d2d5.png",
-      "PackagePath": "staticwebassets\\images\\companies\\01b10643-4f14-4cd9-a794-9f52f137d2d5.png"
+      "Id": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\a417864e-313e-4b27-8c91-eb2f35b5ac67.jpg",
+      "PackagePath": "staticwebassets\\images\\companies\\a417864e-313e-4b27-8c91-eb2f35b5ac67.jpg"
     },
     {
-      "Id": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\01f8853b-979c-4c5f-8ca5-7a727979620d.jpg",
-      "PackagePath": "staticwebassets\\images\\companies\\01f8853b-979c-4c5f-8ca5-7a727979620d.jpg"
+      "Id": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\a9dd35dc-e5f4-4a19-80ac-5436519d970b.jpg",
+      "PackagePath": "staticwebassets\\images\\companies\\a9dd35dc-e5f4-4a19-80ac-5436519d970b.jpg"
     },
     {
-      "Id": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\07dfcdf0-eb1b-4fe8-af41-0d0c5d028df5.png",
-      "PackagePath": "staticwebassets\\images\\companies\\07dfcdf0-eb1b-4fe8-af41-0d0c5d028df5.png"
+      "Id": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\ae0ac23e-4c9d-4242-91e5-d0b2b5e47c9e.jpg",
+      "PackagePath": "staticwebassets\\images\\companies\\ae0ac23e-4c9d-4242-91e5-d0b2b5e47c9e.jpg"
     },
     {
-      "Id": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\0948da34-bfb8-43a5-b491-0d5a1219c60f.jpg",
-      "PackagePath": "staticwebassets\\images\\companies\\0948da34-bfb8-43a5-b491-0d5a1219c60f.jpg"
+      "Id": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\b26b8d2e-f953-4d15-bb95-78aafafa2e73.jpg",
+      "PackagePath": "staticwebassets\\images\\companies\\b26b8d2e-f953-4d15-bb95-78aafafa2e73.jpg"
     },
     {
-      "Id": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\1987bb50-1581-4ba7-8c67-600d33c6e9c0.jpg",
-      "PackagePath": "staticwebassets\\images\\companies\\1987bb50-1581-4ba7-8c67-600d33c6e9c0.jpg"
-    },
-    {
-      "Id": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\25782a03-032a-40f1-99aa-f6d7c47bdebb.png",
-      "PackagePath": "staticwebassets\\images\\companies\\25782a03-032a-40f1-99aa-f6d7c47bdebb.png"
-    },
-    {
-      "Id": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\350cedc1-5b2b-46f6-a641-909a2a2e2d79.jpg",
-      "PackagePath": "staticwebassets\\images\\companies\\350cedc1-5b2b-46f6-a641-909a2a2e2d79.jpg"
-    },
-    {
-      "Id": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\36658e69-a807-41e8-866a-636eead78c1a.jpg",
-      "PackagePath": "staticwebassets\\images\\companies\\36658e69-a807-41e8-866a-636eead78c1a.jpg"
-    },
-    {
-      "Id": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\3694560a-84fc-41fb-9881-c2274a71bac0.jpg",
-      "PackagePath": "staticwebassets\\images\\companies\\3694560a-84fc-41fb-9881-c2274a71bac0.jpg"
-    },
-    {
-      "Id": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\36cb57b8-c281-40f2-b835-daa6739e7a04.jpg",
-      "PackagePath": "staticwebassets\\images\\companies\\36cb57b8-c281-40f2-b835-daa6739e7a04.jpg"
-    },
-    {
-      "Id": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\6fdcd8e2-a876-43b5-b1be-fc57a1db8426.png",
-      "PackagePath": "staticwebassets\\images\\companies\\6fdcd8e2-a876-43b5-b1be-fc57a1db8426.png"
-    },
-    {
-      "Id": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\77d5313f-b571-45c9-96c6-2e2471b90b9f.jpg",
-      "PackagePath": "staticwebassets\\images\\companies\\77d5313f-b571-45c9-96c6-2e2471b90b9f.jpg"
-    },
-    {
-      "Id": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\7bdab59f-0326-43fe-a26f-62fdfb30b135.png",
-      "PackagePath": "staticwebassets\\images\\companies\\7bdab59f-0326-43fe-a26f-62fdfb30b135.png"
-    },
-    {
-      "Id": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\95b77600-5a1f-4eaf-b11e-e4d108651a8b.jpg",
-      "PackagePath": "staticwebassets\\images\\companies\\95b77600-5a1f-4eaf-b11e-e4d108651a8b.jpg"
-    },
-    {
-      "Id": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\b457f9e3-a458-4e09-800f-ffca6d4ea028.jpg",
-      "PackagePath": "staticwebassets\\images\\companies\\b457f9e3-a458-4e09-800f-ffca6d4ea028.jpg"
-    },
-    {
-      "Id": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\ca4ef205-9604-46a0-b3da-4b0271a89653.jpg",
-      "PackagePath": "staticwebassets\\images\\companies\\ca4ef205-9604-46a0-b3da-4b0271a89653.jpg"
-    },
-    {
-      "Id": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\ddb459ad-c036-4467-9b53-ca0862dc73c1.jpg",
-      "PackagePath": "staticwebassets\\images\\companies\\ddb459ad-c036-4467-9b53-ca0862dc73c1.jpg"
-    },
-    {
-      "Id": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\eb8ff591-023f-4b68-a474-413a087b6d47.jpg",
-      "PackagePath": "staticwebassets\\images\\companies\\eb8ff591-023f-4b68-a474-413a087b6d47.jpg"
-    },
-    {
-      "Id": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\eba8e0bb-7231-4eb1-add4-2d54574ed5df.jpg",
-      "PackagePath": "staticwebassets\\images\\companies\\eba8e0bb-7231-4eb1-add4-2d54574ed5df.jpg"
-    },
-    {
-      "Id": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\f10c5d1c-93a2-4d98-9140-417c2ec0012f.png",
-      "PackagePath": "staticwebassets\\images\\companies\\f10c5d1c-93a2-4d98-9140-417c2ec0012f.png"
-    },
-    {
-      "Id": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\f96f4d5d-f3e2-46f4-9fdd-edd8de7f7a8a.jpg",
-      "PackagePath": "staticwebassets\\images\\companies\\f96f4d5d-f3e2-46f4-9fdd-edd8de7f7a8a.jpg"
+      "Id": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\ee6a5207-cb65-45c2-8b0f-8051372cae36.jpg",
+      "PackagePath": "staticwebassets\\images\\companies\\ee6a5207-cb65-45c2-8b0f-8051372cae36.jpg"
     },
     {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.Hair.Api.Microsoft.AspNetCore.StaticWebAssets.props",

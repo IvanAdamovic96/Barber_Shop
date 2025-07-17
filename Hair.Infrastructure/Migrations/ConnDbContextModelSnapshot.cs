@@ -25,7 +25,6 @@ namespace Hair.Infrastructure.Migrations
             modelBuilder.Entity("Hair.Domain.Entities.AnonymousUser", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("Email")
@@ -43,7 +42,7 @@ namespace Hair.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AnonymousUser");
+                    b.ToTable("AnonymousUser", (string)null);
                 });
 
             modelBuilder.Entity("Hair.Domain.Entities.ApplicationUser", b =>
@@ -53,9 +52,6 @@ namespace Hair.Infrastructure.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer");
-
-                    b.Property<Guid?>("CompanyId")
-                        .HasColumnType("uuid");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -124,10 +120,27 @@ namespace Hair.Infrastructure.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("Hair.Domain.Entities.ApplicationUserCompany", b =>
+                {
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("ApplicationUserId", "CompanyId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("ApplicationUserCompany", (string)null);
+                });
+
             modelBuilder.Entity("Hair.Domain.Entities.Appointment", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("Barberid")
@@ -142,14 +155,17 @@ namespace Hair.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Appointments");
+                    b.ToTable("Appointment", (string)null);
                 });
 
             modelBuilder.Entity("Hair.Domain.Entities.Barber", b =>
                 {
                     b.Property<Guid>("BarberId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("BarberName")
                         .IsRequired()
@@ -177,9 +193,12 @@ namespace Hair.Infrastructure.Migrations
 
                     b.HasKey("BarberId");
 
+                    b.HasIndex("ApplicationUserId")
+                        .IsUnique();
+
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("Barbers");
+                    b.ToTable("Barbers", (string)null);
                 });
 
             modelBuilder.Entity("Hair.Domain.Entities.Company", b =>
@@ -192,24 +211,21 @@ namespace Hair.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("CompanyOwnerId")
-                        .HasColumnType("text");
-
                     b.Property<string[]>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("text[]");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyOwnerId");
+                    b.HasIndex("CompanyName")
+                        .IsUnique();
 
-                    b.ToTable("Companies");
+                    b.ToTable("Company", (string)null);
                 });
 
             modelBuilder.Entity("Hair.Domain.Entities.Haircut", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("CompanyId")
@@ -229,7 +245,7 @@ namespace Hair.Infrastructure.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("Haircuts");
+                    b.ToTable("Haircuts", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -364,24 +380,42 @@ namespace Hair.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Hair.Domain.Entities.ApplicationUserCompany", b =>
+                {
+                    b.HasOne("Hair.Domain.Entities.ApplicationUser", "ApplicationUser")
+                        .WithMany("OwnedCompanies")
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Hair.Domain.Entities.Company", "Company")
+                        .WithMany("ApplicationUserCompanies")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("Company");
+                });
+
             modelBuilder.Entity("Hair.Domain.Entities.Barber", b =>
                 {
+                    b.HasOne("Hair.Domain.Entities.ApplicationUser", "ApplicationUser")
+                        .WithOne("Barber")
+                        .HasForeignKey("Hair.Domain.Entities.Barber", "ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Hair.Domain.Entities.Company", "Company")
                         .WithMany("Barbers")
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("ApplicationUser");
+
                     b.Navigation("Company");
-                });
-
-            modelBuilder.Entity("Hair.Domain.Entities.Company", b =>
-                {
-                    b.HasOne("Hair.Domain.Entities.ApplicationUser", "Owner")
-                        .WithMany("Companies")
-                        .HasForeignKey("CompanyOwnerId");
-
-                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("Hair.Domain.Entities.Haircut", b =>
@@ -448,11 +482,16 @@ namespace Hair.Infrastructure.Migrations
 
             modelBuilder.Entity("Hair.Domain.Entities.ApplicationUser", b =>
                 {
-                    b.Navigation("Companies");
+                    b.Navigation("Barber")
+                        .IsRequired();
+
+                    b.Navigation("OwnedCompanies");
                 });
 
             modelBuilder.Entity("Hair.Domain.Entities.Company", b =>
                 {
+                    b.Navigation("ApplicationUserCompanies");
+
                     b.Navigation("Barbers");
 
                     b.Navigation("Haircuts");
