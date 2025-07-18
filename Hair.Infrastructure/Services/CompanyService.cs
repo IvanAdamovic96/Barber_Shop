@@ -3,13 +3,15 @@ using Hair.Application.Common.Dto.Company;
 using Hair.Application.Common.Interfaces;
 using Hair.Application.Common.Mappers;
 using Hair.Domain.Entities;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Hair.Infrastructure.Services;
 
-public class CompanyService (IHairDbContext dbContext) : ICompanyService
+public class CompanyService (IHairDbContext dbContext, IWebHostEnvironment hostEnvironment) : ICompanyService
 {
     
     public async Task<List<string>> UploadImageAsync([FromForm] IList<IFormFile> images)
@@ -43,8 +45,6 @@ public class CompanyService (IHairDbContext dbContext) : ICompanyService
         return urls;
     }
     
-    
-    
     public async Task<CompanyCreateDto> CreateCompanyAsync(string companyName, IList<IFormFile?> image,
         CancellationToken cancellationToken)
     {
@@ -56,14 +56,15 @@ public class CompanyService (IHairDbContext dbContext) : ICompanyService
         }
 
         IList<string?> imageUrl = null;
-        
+        imageUrl = await UploadImageAsync(image);
+        /*
         for (int i = 0; i < image.Count; i++)
         {
             if (image is not null)
             {
-                imageUrl = await UploadImageAsync(image);
+                
             }
-        }
+        }*/
         
         Company company = new Company(companyName);
         company.AddImage(imageUrl);
@@ -72,11 +73,6 @@ public class CompanyService (IHairDbContext dbContext) : ICompanyService
         await dbContext.SaveChangesAsync(cancellationToken);
         return new CompanyCreateDto(company.CompanyName, company.ImageUrl);
     }
-    
-    
-    
-    
-    
 
     public async Task<List<BarberFullDetailsDto>> CompanyDetailsByIdAsync(Guid companyId, CancellationToken cancellationToken)
     {
@@ -93,10 +89,6 @@ public class CompanyService (IHairDbContext dbContext) : ICompanyService
         return barbers.Select(barber =>
             new BarberFullDetailsDto(barber.BarberId, barber.BarberName, barber.Company.CompanyName)).ToList();
     }
-
-    
-    
-    
     
     public async Task<List<CompanyDetailsDto>> GetAllCompaniesAsync(CompanyDetailsDto companyDetailsDto, CancellationToken cancellationToken)
     {
@@ -117,4 +109,57 @@ public class CompanyService (IHairDbContext dbContext) : ICompanyService
         var toReturnCompanyDetails = new CompanyDetailsDto(company.Id, company.CompanyName, company.ImageUrl);
         return toReturnCompanyDetails;
     }
+
+    public async Task<string> DeleteCompanyByCompanyIdAsync(Guid companyId, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var companyToDelete = await dbContext.Companies.Where(c => c.Id == companyId).FirstOrDefaultAsync(cancellationToken);
+        
+            if (companyToDelete == null)
+            {
+                throw new Exception($"Company {companyId} does not exist");
+            }
+
+            if (companyToDelete.ImageUrl != null && companyToDelete.ImageUrl.Any())
+            {
+                foreach (var image in companyToDelete.ImageUrl)
+                {
+                    if (string.IsNullOrWhiteSpace(image)) continue;
+
+                    var relativePath = image.Replace("http://localhost:5045/", "");
+
+                    if (relativePath.StartsWith("images/companies/", StringComparison.OrdinalIgnoreCase))
+                    {
+                        var filePath = Path.Combine(hostEnvironment.WebRootPath, relativePath);
+                        if (File.Exists(filePath))
+                        {
+                            File.Delete(filePath);
+                        }
+                        else
+                        {
+                            throw new Exception($"Image file {filePath} does not exist");
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception($"Error deleting file {image} for property with id: {companyId}");
+                    }
+                }
+            }
+            
+            dbContext.Companies.Remove(companyToDelete);
+            await dbContext.SaveChangesAsync(cancellationToken);
+            return $"Successfully deleted company with {companyId}";
+        }
+        catch (Exception e)
+        {
+            throw new Exception($"Failed to delete company {companyId}", e);
+        }
+        
+    }
+    
+    
+    
+    
 }

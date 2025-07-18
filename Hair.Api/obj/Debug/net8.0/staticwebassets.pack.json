@@ -1,8 +1,24 @@
 {
   "Files": [
     {
+      "Id": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\3a31b41a-d3f6-4cf8-9803-2e1703dd6511.jpg",
+      "PackagePath": "staticwebassets\\images\\companies\\3a31b41a-d3f6-4cf8-9803-2e1703dd6511.jpg"
+    },
+    {
       "Id": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\3dd7ae8d-99e3-41b9-b771-3e97b0710d2e.jpg",
       "PackagePath": "staticwebassets\\images\\companies\\3dd7ae8d-99e3-41b9-b771-3e97b0710d2e.jpg"
+    },
+    {
+      "Id": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\4bb975fa-3074-40b6-bf69-54bea3d8e206.jpg",
+      "PackagePath": "staticwebassets\\images\\companies\\4bb975fa-3074-40b6-bf69-54bea3d8e206.jpg"
+    },
+    {
+      "Id": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\5339addd-c9a5-44b8-8a7b-a88462156062.jpg",
+      "PackagePath": "staticwebassets\\images\\companies\\5339addd-c9a5-44b8-8a7b-a88462156062.jpg"
+    },
+    {
+      "Id": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\8b91749c-86b7-4902-823e-aee833fd25e3.jpg",
+      "PackagePath": "staticwebassets\\images\\companies\\8b91749c-86b7-4902-823e-aee833fd25e3.jpg"
     },
     {
       "Id": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\a417864e-313e-4b27-8c91-eb2f35b5ac67.jpg",
@@ -19,6 +35,10 @@
     {
       "Id": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\b26b8d2e-f953-4d15-bb95-78aafafa2e73.jpg",
       "PackagePath": "staticwebassets\\images\\companies\\b26b8d2e-f953-4d15-bb95-78aafafa2e73.jpg"
+    },
+    {
+      "Id": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\ca42c837-a5ed-452b-ba8e-1750a01d4fd9.jpg",
+      "PackagePath": "staticwebassets\\images\\companies\\ca42c837-a5ed-452b-ba8e-1750a01d4fd9.jpg"
     },
     {
       "Id": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\ee6a5207-cb65-45c2-8b0f-8051372cae36.jpg",

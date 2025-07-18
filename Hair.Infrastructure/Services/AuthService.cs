@@ -212,8 +212,7 @@ public class AuthService(
 
         return assignCompanyOwnerDto;
     }
-
-
+    
     public async Task<bool> CheckIfCompanyOwnerExistsAsync(Guid companyId, CancellationToken cancellationToken)
     {
         var exists = await dbContext.ApplicationUserCompany

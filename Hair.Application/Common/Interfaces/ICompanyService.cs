@@ -27,6 +27,10 @@ public interface ICompanyService
         CancellationToken cancellationToken
     );
 
+    Task<string> DeleteCompanyByCompanyIdAsync(
+        Guid companyId,
+        CancellationToken cancellationToken
+    );
 
 
 }
