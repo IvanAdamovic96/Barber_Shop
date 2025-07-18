@@ -1,5 +1,6 @@
 ﻿using Hair.Application.Auth.Commands;
 using Hair.Application.Auth.Queries;
+using Hair.Application.Common.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -45,5 +46,11 @@ public class AuthController : ApiBaseController
     public async Task<IActionResult> AssignCompanyOwner([FromForm] AssignCompanyOwnerCommand assignCompanyOwnerCommand)
     {
         return Ok(await Mediator.Send(assignCompanyOwnerCommand));
+    }
+
+    [HttpGet("get-companies-by-owner-email")]
+    public async Task<IActionResult> GetCompaniesByOwnerEmailAsync([FromQuery] GetCompaniesByOwnerEmailQuery query)
+    {
+        return Ok(await Mediator.Send(query));
     }
 }

@@ -16,4 +16,5 @@ public interface IAuthService
     
     Task<AssignCompanyOwnerDto> AssignCompanyOwnerAsync(AssignCompanyOwnerDto assignCompanyOwnerDto,
         CancellationToken cancellationToken);
+    Task<List<CompanyDetailsDto>> GetCompaniesByOwnerEmailAsync(string email, CancellationToken cancellationToken);
 }

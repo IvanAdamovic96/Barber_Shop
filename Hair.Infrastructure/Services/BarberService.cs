@@ -91,7 +91,15 @@ public class BarberService (IHairDbContext dbContext, UserManager<ApplicationUse
     public async Task<List<BarberDetailsDto>> GetAllBarbersAsync(Guid companyId, CancellationToken cancellationToken)
     {
         var barbers = await dbContext.Barbers.Where(x => x.Company.Id == companyId)
-            .Select(x=> new BarberDetailsDto(x.BarberId, x.BarberName, x.Company.CompanyName))
+            .Select(x=> new BarberDetailsDto(
+                x.BarberId,
+                x.BarberName,
+                x.Company.CompanyName,
+                x.PhoneNumber,
+                x.Email,
+                x.Company.Id,
+                x.IndividualStartTime,
+                x.IndividualEndTime))
             .ToListAsync();
 
         return barbers;

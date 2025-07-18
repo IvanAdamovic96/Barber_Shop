@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "dEhMJopz8BU/TnhRYerK2CeLbgtoysS0BO93o2PTBE4=",
+  "Hash": "IlbnqnWBygb5y5T64YiewCbsXh6qyOzTuvU90gSoPXQ=",
   "Source": "Hair.Api",
   "BasePath": "_content/Hair.Api",
   "Mode": "Default",
@@ -15,5 +15,44 @@
       "Pattern": "**"
     }
   ],
-  "Assets": []
+  "Assets": [
+    {
+      "Identity": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\0d103cf6-7bf0-4904-96a0-a3e31e7df6c4.jpg",
+      "SourceId": "Hair.Api",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\BarberApp3\\Hair.Api\\wwwroot\\",
+      "BasePath": "_content/Hair.Api",
+      "RelativePath": "images/companies/0d103cf6-7bf0-4904-96a0-a3e31e7df6c4.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\companies\\0d103cf6-7bf0-4904-96a0-a3e31e7df6c4.jpg"
+    },
+    {
+      "Identity": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\ee148d20-1b2e-4983-aade-427e5bccb2c8.jpg",
+      "SourceId": "Hair.Api",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\BarberApp3\\Hair.Api\\wwwroot\\",
+      "BasePath": "_content/Hair.Api",
+      "RelativePath": "images/companies/ee148d20-1b2e-4983-aade-427e5bccb2c8.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\companies\\ee148d20-1b2e-4983-aade-427e5bccb2c8.jpg"
+    }
+  ]
 }
