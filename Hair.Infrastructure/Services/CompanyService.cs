@@ -5,6 +5,7 @@ using Hair.Application.Common.Mappers;
 using Hair.Domain.Entities;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -110,6 +111,77 @@ public class CompanyService (IHairDbContext dbContext, IWebHostEnvironment hostE
         return toReturnCompanyDetails;
     }
 
+    
+    
+    public async Task<string> UpdateCompanyAsync(UpdateCompanyDto updateCompanyDto, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var companyToUpdate = await dbContext.Companies.Where(c => c.Id == updateCompanyDto.CompanyId)
+                .FirstOrDefaultAsync(cancellationToken);
+            if (companyToUpdate is null)
+            {
+                throw new Exception($"Company {updateCompanyDto.CompanyName} does not exist");
+            }
+            companyToUpdate.UpdateCompanyName(updateCompanyDto.CompanyName);
+            var currentImageUrls = companyToUpdate.ImageUrl.ToList();
+            //var keptImages = currentImageUrls.Where(url => !updateCompanyDto.ImagesToDelete.Contains(url)).ToList();
+            if (updateCompanyDto.ImagesToDelete != null && updateCompanyDto.ImagesToDelete.Any())
+            {
+                foreach (var image in updateCompanyDto.ImagesToDelete)
+                {
+                    if (string.IsNullOrWhiteSpace(image)) continue;
+                    var relativePath = image.Replace("http://localhost:5045/", "");
+                    if (relativePath.StartsWith("images/companies/", StringComparison.OrdinalIgnoreCase))
+                    {
+                        var filePath = Path.Combine(hostEnvironment.WebRootPath, relativePath);
+                        if (File.Exists(filePath))
+                        {
+                            File.Delete(filePath);
+                            currentImageUrls.Remove(image);
+                        }
+                        else
+                        {
+                            Console.WriteLine($"WARNING: Image file {filePath} did not exist for deletion for company {updateCompanyDto.CompanyId}.");
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception($"Greška pri brisanju fajla {image}: Pogrešna putanja slike za kompaniju sa ID-jem: {updateCompanyDto.CompanyId}");
+                    }
+                }
+            }
+
+            if (updateCompanyDto.NewImages != null && updateCompanyDto.NewImages.Any())
+            {
+                var newUploadedImages = await UploadImageAsync(updateCompanyDto.NewImages);
+                foreach (var newUrl in newUploadedImages)
+                {
+                    if (!string.IsNullOrWhiteSpace(newUrl) && !currentImageUrls.Contains(newUrl))
+                    {
+                        currentImageUrls.Add(newUrl);
+                    }
+                }
+                //keptImages.AddRange(newUploadedImages.Where(url => !string.IsNullOrWhiteSpace(url)));
+            }
+            //IList<string?> newImageUrls = null;
+            //newImageUrls = await UploadImageAsync(updateCompanyDto.NewImages);
+            companyToUpdate.AddImage(currentImageUrls);
+            if (!companyToUpdate.ImageUrl.Any())
+            {
+                throw new Exception("Kompanija mora imati barem jednu sliku.");
+            }
+            await dbContext.SaveChangesAsync(cancellationToken);
+            return "Uspešno izmenjeni podaci kompanije.";
+        }
+        catch (Exception e)
+        {
+            throw new Exception($"Error updating company {updateCompanyDto.CompanyName} ", e);
+        }
+    }
+
+    
+    
     public async Task<string> DeleteCompanyByCompanyIdAsync(Guid companyId, CancellationToken cancellationToken)
     {
         try
@@ -143,7 +215,7 @@ public class CompanyService (IHairDbContext dbContext, IWebHostEnvironment hostE
                     }
                     else
                     {
-                        throw new Exception($"Error deleting file {image} for property with id: {companyId}");
+                        throw new Exception($"Error deleting file {image} for company with id: {companyId}");
                     }
                 }
             }

@@ -66,6 +66,12 @@ public class CompanyController(IHairDbContext dbContext): ApiBaseController
         return Ok(await Mediator.Send(query));
     }
 
+    [HttpPut("update-company")]
+    public async Task<IActionResult> UpdateCompanyAsync([FromForm] UpdateCompanyCommand command)
+    {
+        return Ok(await Mediator.Send(command));
+    }
+
     [HttpDelete("delete-company")]
     public async Task<IActionResult> DeleteCompanyByCompanyIdAsync([FromQuery] DeleteCompanyCommand command)
     {
