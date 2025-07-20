@@ -1,9 +1,9 @@
 ﻿namespace Hair.Application.Common.Dto.Auth;
 
-public record CompanyOwnerDetails(
+public record UpdateOwnerDto(
     string OwnerId,
-    string Email, 
     string FirstName,
     string LastName,
+    string Email,
     string PhoneNumber
     );

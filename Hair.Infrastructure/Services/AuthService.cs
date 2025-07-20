@@ -89,9 +89,9 @@ public class AuthService(
             /* var ownerExists = await dbContext.ApplicationUserCompany.
                  Where(x => x.ApplicationUserId == companyOwnerExistCheck.Id).FirstOrDefaultAsync();*/
 
-            if (companyOwnerExistCheck != null && companyOwnerExistCheck.Role == Role.CompanyOwner)
+            if (companyOwnerExistCheck != null)
             {
-                throw new Exception($"Vlasnik kompanije {companyOwnerDto.Email} već postoji!");
+                throw new Exception($"Korisnik sa email adresom: {companyOwnerDto.Email} već postoji!");
             }
 
 
@@ -137,59 +137,31 @@ public class AuthService(
         {
             throw new Exception($"Greška prilikom kreiranja vlasnika: {ex.Message}");
         }
+    }
 
-        /*
+    public async Task<string> UpdateCompanyOwnerAsync(UpdateOwnerDto updateOwnerDto, CancellationToken cancellationToken)
+    {
         try
         {
-
-            var exists = await userManager.Users
-                .Where(u => u.CompanyId == companyOwnerDto.CompanyId && u.Role == Role.CompanyOwner)
-                .FirstOrDefaultAsync(cancellationToken);
-
-            if (exists != null)
-            {
-                throw new Exception($"Kompanija {companyOwnerDto.CompanyId} već postoji");
-            }
-
-            var company = await dbContext.Companies
-                .FirstOrDefaultAsync(c => c.Id == companyOwnerDto.CompanyId, cancellationToken);
-
-            var appUser = new ApplicationUser()
-            {
-                UserName = companyOwnerDto.Email,
-                Email = companyOwnerDto.Email,
-                PhoneNumber = companyOwnerDto.PhoneNumber,
-                FirstName = companyOwnerDto.FirstName,
-                LastName = companyOwnerDto.LastName,
-                CompanyId = companyOwnerDto.CompanyId,
-                Role = Role.CompanyOwner
-            };
-            var result = await userManager.CreateAsync(appUser, companyOwnerDto.Password);
-
-            if (!result.Succeeded)
-            {
-                var errorMsg = string.Join(", ", result.Errors.Select(e => e.Description));
-                throw new Exception(errorMsg);
-            }
-
-            company.CompanyOwnerId = appUser.Id;
-            await dbContext.SaveChangesAsync(cancellationToken);
-
-
-            return new CompanyOwnerResponseDto
-            (appUser.Email,
-                appUser.CompanyId,
-                appUser.FirstName,
-                appUser.LastName,
-                appUser.PhoneNumber);
+            var ownerToUpdate = await userManager.FindByIdAsync(updateOwnerDto.OwnerId);
+            ownerToUpdate.FirstName = updateOwnerDto.FirstName;
+            ownerToUpdate.LastName = updateOwnerDto.LastName;
+            ownerToUpdate.UserName = updateOwnerDto.Email;
+            ownerToUpdate.NormalizedUserName = updateOwnerDto.Email.ToUpper();
+            ownerToUpdate.NormalizedEmail = updateOwnerDto.Email.ToUpper();
+            ownerToUpdate.Email = updateOwnerDto.Email;
+            ownerToUpdate.PhoneNumber = updateOwnerDto.PhoneNumber;
+            
+            await userManager.UpdateAsync(ownerToUpdate);
+            return "Uspešno izmenjen vlasnik!";
+            
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            throw new Exception($"Greška prilikom kreiranja vlasnika: {ex.Message}");
+            throw new Exception(e.Message);
         }
-        */
     }
-    
+
     public async Task<AssignCompanyOwnerDto> AssignCompanyOwnerAsync(AssignCompanyOwnerDto assignCompanyOwnerDto,
         CancellationToken cancellationToken)
     {

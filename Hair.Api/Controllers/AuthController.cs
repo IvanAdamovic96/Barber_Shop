@@ -26,7 +26,16 @@ public class AuthController : ApiBaseController
     [HttpPost("createCompanyOwner")]
     public async Task<IActionResult> CreateCompanyOwner([FromForm] CreateCompanyOwnerCommand createCompanyOwnerCommand)
     {
-        return Ok(await Mediator.Send(createCompanyOwnerCommand));
+        var result = await Mediator.Send(createCompanyOwnerCommand);
+        return Ok(new { Message = result });
+        //return Ok(await Mediator.Send(createCompanyOwnerCommand));
+    }
+
+    [HttpPut("update-owner")]
+    public async Task<IActionResult> UpdateCompanyOwner([FromForm] UpdateCompanyOwnerCommand updateCompanyOwnerCommand)
+    {
+        var result = await Mediator.Send(updateCompanyOwnerCommand);
+        return Ok(new { Message = result });
     }
 
     [HttpGet("checkIfCompanyOwnerExists")]
@@ -37,7 +46,14 @@ public class AuthController : ApiBaseController
     }
     
     [HttpGet("get-owners")]
-    public async Task<IActionResult> GetOwners([FromQuery] GetAllOwnersQuery query, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetOwners([FromQuery] GetAllOwnersQuery query)
+    {
+        return Ok(await Mediator.Send(query));
+    }
+
+    [HttpGet("get-owner-details")]
+    public async Task<IActionResult> GetOwnerDetailsById([FromQuery] GetOwnerDetailsByIdQuery query,
+        CancellationToken cancellationToken)
     {
         return Ok(await Mediator.Send(query, cancellationToken));
     }

@@ -23,7 +23,8 @@ public class GetAllOwnersQueryHandler(UserManager<ApplicationUser> userManager)
                 OwnerId: x.Id,
                 Email: x.Email,
                 //CompanyId: x.CompanyId,
-                Name: x.FirstName,
+                FirstName: x.FirstName,
+                LastName: x.LastName,
                 PhoneNumber: x.PhoneNumber
                
             )).ToList();
