@@ -37,6 +37,13 @@ public class AuthController : ApiBaseController
         var result = await Mediator.Send(updateCompanyOwnerCommand);
         return Ok(new { Message = result });
     }
+    
+    [HttpDelete("delete-owner")]
+    public async Task<IActionResult> DeleteCompanyByCompanyIdAsync([FromQuery] DeleteCompanyOwnerCommand command)
+    {
+        var result = await Mediator.Send(command);
+        return Ok(new { Message = result });
+    }
 
     [HttpGet("checkIfCompanyOwnerExists")]
     public async Task<IActionResult> CheckIfCompanyOwnerExists([FromQuery] CheckOwnerExistsQuery query,
