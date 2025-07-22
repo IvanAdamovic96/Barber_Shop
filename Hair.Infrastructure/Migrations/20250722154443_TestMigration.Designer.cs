@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Hair.Infrastructure.Migrations
 {
     [DbContext(typeof(ConnDbContext))]
-    [Migration("20250717113322_HaircutsMigration")]
-    partial class HaircutsMigration
+    [Migration("20250722154443_TestMigration")]
+    partial class TestMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -174,7 +174,7 @@ namespace Hair.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid>("CompanyId")
+                    b.Property<Guid?>("CompanyId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Email")
@@ -413,8 +413,7 @@ namespace Hair.Infrastructure.Migrations
                     b.HasOne("Hair.Domain.Entities.Company", "Company")
                         .WithMany("Barbers")
                         .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("ApplicationUser");
 

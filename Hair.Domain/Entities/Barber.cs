@@ -26,6 +26,9 @@ public class Barber
     public Role Role { get; set; }
     //public string PictureUrl { get; private set; } // dodati
     public string Email { get; private set; }
+    
+    public Guid? CompanyId { get; private set; }
+    [ForeignKey(nameof(CompanyId))]
     public Company Company { get; private set; }
     public TimeSpan IndividualStartTime { get; private set; } 
     public TimeSpan IndividualEndTime { get; private set; }   
@@ -40,10 +43,41 @@ public class Barber
         Company = company;
         return this;
     }
-
     public void SetApplicationUserId(string userId)
     {
         ApplicationUserId = userId;
     }
+    public Barber UpdateBarberName(string newBarberName)
+    {
+        BarberName = newBarberName;
+        return this;
+    }
+    public Barber UpdateBarberPhoneNumber(string newPhoneNumber)
+    {
+        PhoneNumber = newPhoneNumber;
+        return this;
+    }
+    public Barber UpdateBarberEmail(string newEmail)
+    {
+        Email = newEmail;
+        return this;
+    }
+    public Barber UpdateIndividualStartTime(TimeSpan newIndividualStartTime)
+    {
+        IndividualStartTime = newIndividualStartTime;
+        return this;
+    }
+    public Barber UpdateIndividualEndTime(TimeSpan newIndividualEndTime)
+    {
+        IndividualEndTime = newIndividualEndTime;
+        return this;
+    }
 
+    public Barber UnsetCompany()
+    {
+        typeof(Barber)
+            .GetProperty("CompanyId", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public)
+            ?.SetValue(this, null);
+        return this;
+    }
 }

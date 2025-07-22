@@ -171,7 +171,7 @@ namespace Hair.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid>("CompanyId")
+                    b.Property<Guid?>("CompanyId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Email")
@@ -410,8 +410,7 @@ namespace Hair.Infrastructure.Migrations
                     b.HasOne("Hair.Domain.Entities.Company", "Company")
                         .WithMany("Barbers")
                         .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("ApplicationUser");
 

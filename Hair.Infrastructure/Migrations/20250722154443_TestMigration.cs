@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Hair.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class HaircutsMigration : Migration
+    public partial class TestMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -236,7 +236,7 @@ namespace Hair.Infrastructure.Migrations
                     PhoneNumber = table.Column<string>(type: "text", nullable: false),
                     Role = table.Column<int>(type: "integer", nullable: false),
                     Email = table.Column<string>(type: "text", nullable: false),
-                    CompanyId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CompanyId = table.Column<Guid>(type: "uuid", nullable: true),
                     IndividualStartTime = table.Column<TimeSpan>(type: "interval", nullable: false),
                     IndividualEndTime = table.Column<TimeSpan>(type: "interval", nullable: false),
                     ApplicationUserId = table.Column<string>(type: "text", nullable: false)
@@ -255,7 +255,7 @@ namespace Hair.Infrastructure.Migrations
                         column: x => x.CompanyId,
                         principalTable: "Company",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(

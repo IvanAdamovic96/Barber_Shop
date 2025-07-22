@@ -201,3 +201,15 @@ D:\BarberApp3\Hair.Api\bin\Debug\net8.0\Vonage.dll
 D:\BarberApp3\Hair.Api\bin\Debug\net8.0\Yoh.Text.Json.NamingPolicies.dll
 D:\BarberApp3\Hair.Api\bin\Debug\net8.0\runtimes\browser\lib\net8.0\System.Text.Encodings.Web.dll
 D:\BarberApp3\Hair.Api\bin\Debug\net8.0\Hair.Api.staticwebassets.runtime.json
+D:\BarberApp3\Hair.Api\bin\Debug\net8.0\Microsoft.Extensions.DependencyModel.dll
+D:\BarberApp3\Hair.Api\bin\Debug\net8.0\Microsoft.Extensions.Diagnostics.Abstractions.dll
+D:\BarberApp3\Hair.Api\bin\Debug\net8.0\Microsoft.Extensions.Hosting.Abstractions.dll
+D:\BarberApp3\Hair.Api\bin\Debug\net8.0\Serilog.dll
+D:\BarberApp3\Hair.Api\bin\Debug\net8.0\Serilog.AspNetCore.dll
+D:\BarberApp3\Hair.Api\bin\Debug\net8.0\Serilog.Extensions.Hosting.dll
+D:\BarberApp3\Hair.Api\bin\Debug\net8.0\Serilog.Extensions.Logging.dll
+D:\BarberApp3\Hair.Api\bin\Debug\net8.0\Serilog.Formatting.Compact.dll
+D:\BarberApp3\Hair.Api\bin\Debug\net8.0\Serilog.Settings.Configuration.dll
+D:\BarberApp3\Hair.Api\bin\Debug\net8.0\Serilog.Sinks.Console.dll
+D:\BarberApp3\Hair.Api\bin\Debug\net8.0\Serilog.Sinks.Debug.dll
+D:\BarberApp3\Hair.Api\bin\Debug\net8.0\Serilog.Sinks.File.dll

@@ -13,6 +13,16 @@ public interface IBarberService
         Guid companyId, 
         CancellationToken cancellationToken
     );
+
+    Task<string> UpdateBarberAsync(
+        UpdateBarberDto updateBarberDto,
+        CancellationToken cancellationToken
+    );
+
+    Task<string> DeleteBarberAsync(
+        Guid barberId,
+        CancellationToken cancellationToken
+    );
     
     Boolean IsValidSerbianPhoneNumber(string phoneNumber);
     

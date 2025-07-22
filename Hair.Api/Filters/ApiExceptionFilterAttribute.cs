@@ -1,4 +1,5 @@
 ﻿
+using Hair.Application.Common.Exceptions;
 using Hair.Application.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -8,18 +9,61 @@ namespace Hair.Api.Filters;
 public class ApiExceptionFilterAttribute: ExceptionFilterAttribute
 {
      private readonly IDictionary<Type, Action<ExceptionContext>> _exceptionHandlers;
+     private readonly ILogger<ApiExceptionFilterAttribute> _logger;
+     
 
-    public ApiExceptionFilterAttribute()
+    public ApiExceptionFilterAttribute(ILogger<ApiExceptionFilterAttribute> logger)
     {
+        _logger = logger;
         _exceptionHandlers = new Dictionary<Type, Action<ExceptionContext>>
         {
             { typeof(ValidationExceptions), HandleValidationException },
             { typeof(FluentValidation.ValidationException), HandleFluentValidationException },
             { typeof(NotFoundException), HandleNotFoundException },
-            { typeof(UnauthorizedAccessException), HandleUnauthorizedAccessException }
+            { typeof(UnauthorizedAccessException), HandleUnauthorizedAccessException },
+            { typeof(AppointmentConflictException), HandleAppointmentConflictException },
+            { typeof(AppointmentConsecutiveException), AppointmentConsecutiveException }
         };
     }
+    
+    /*----*/
+    private void AppointmentConsecutiveException(ExceptionContext context)
+    {
+        var details = new ProblemDetails
+        {
+            Title = "Nema dovoljno slobodnih uzastopnih termina u odabrano vreme",
+            Detail = context.Exception.Message,
+            Status = StatusCodes.Status400BadRequest
+        };
 
+        context.Result = new ObjectResult(details)
+        {
+            StatusCode = StatusCodes.Status400BadRequest
+        };
+
+        context.ExceptionHandled = true;
+    }
+    
+    private void HandleAppointmentConflictException(ExceptionContext context)
+    {
+        var details = new ProblemDetails
+        {
+            Title = "Sukob termina",
+            Detail = context.Exception.Message,
+            Status = StatusCodes.Status409Conflict
+        };
+
+        context.Result = new ObjectResult(details)
+        {
+            StatusCode = StatusCodes.Status409Conflict
+        };
+
+        context.ExceptionHandled = true;
+    }
+    /*----*/
+    
+    
+    
     public override void OnException(ExceptionContext context)
     {
         HandleException(context);

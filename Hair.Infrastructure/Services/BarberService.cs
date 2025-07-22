@@ -105,6 +105,73 @@ public class BarberService (IHairDbContext dbContext, UserManager<ApplicationUse
         return barbers;
     }
 
+    public async Task<string> UpdateBarberAsync(UpdateBarberDto updateBarberDto, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var barber = await dbContext.Barbers.Where(x => x.BarberId == updateBarberDto.BarberId)
+                .FirstOrDefaultAsync(cancellationToken);
+
+            if (barber == null)
+            {
+                throw new Exception($"Barber with id {updateBarberDto.BarberId} was not found");
+            }
+            var appBarberUser = await userManager.FindByIdAsync(barber.ApplicationUserId);
+            if (appBarberUser == null)
+            { 
+                throw new Exception($"Frizer sa id-jem {barber.ApplicationUserId} nije pronadjen!");
+            }
+        
+            barber.UpdateBarberName(updateBarberDto.BarberName);
+            barber.UpdateBarberPhoneNumber(updateBarberDto.PhoneNumber);
+            barber.UpdateBarberEmail(updateBarberDto.Email);
+            barber.UpdateIndividualStartTime(updateBarberDto.IndividualStartTime);
+            barber.UpdateIndividualEndTime(updateBarberDto.IndividualEndTime);
+
+            appBarberUser.FirstName = updateBarberDto.BarberName;
+            appBarberUser.LastName = updateBarberDto.BarberName;
+            appBarberUser.PhoneNumber = updateBarberDto.PhoneNumber;
+            appBarberUser.Email = updateBarberDto.Email;
+            appBarberUser.NormalizedEmail = updateBarberDto.Email.ToUpper();
+            appBarberUser.NormalizedUserName = updateBarberDto.Email.ToUpper();
+            appBarberUser.UserName = updateBarberDto.Email;
+        
+            await dbContext.SaveChangesAsync(cancellationToken);
+            await userManager.UpdateAsync(appBarberUser);
+        
+            return "Frizer uspešno izmenjen!";
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
+
+    public async Task<string> DeleteBarberAsync(Guid barberId, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var barberToDelete = await dbContext.Barbers.Where(x => x.BarberId == barberId)
+                .FirstOrDefaultAsync(cancellationToken);
+            if (barberToDelete == null)
+            {
+                throw new Exception($"Frizer sa id-jem {barberId} nije pronadjen!");
+            }
+            //dbContext.Barbers.Remove(barberToDelete);
+
+            barberToDelete.UnsetCompany();
+            
+            await dbContext.SaveChangesAsync(cancellationToken);
+
+            return "Uspešno obrisan frizer!";
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
+
+
     public bool IsValidEmail(string email)
     {
         if (string.IsNullOrWhiteSpace(email))

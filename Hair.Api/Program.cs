@@ -12,8 +12,25 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Serilog;
+using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug() // minimalni nivo logovanja (može i Information ili Warning)
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Warning) // manje detalja za Microsoft namespace
+    .Enrich.FromLogContext()
+    .WriteTo.Console() // log u konzolu
+    .WriteTo.File(
+        "Logs/logs-.txt",               // folder Logs i fajl sa dnevnim rotiranjem
+        rollingInterval: RollingInterval.Day,
+        outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level}] {Message}{NewLine}{Exception}"
+    )
+    .CreateLogger();
+
+// POVEZI SERILOG SA HOST BUILDEROM
+builder.Host.UseSerilog();
 
 builder.Services.AddCors(options =>
 {
@@ -26,7 +43,14 @@ builder.Services.AddCors(options =>
 });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddControllers();
+builder.Services.AddScoped<ApiExceptionFilterAttribute>();
+
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ApiExceptionFilterAttribute>();  
+});
+
+//builder.Services.AddControllers();
 //options => options.Filters.Add<ApiExceptionFilterAttribute>()
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
@@ -54,7 +78,7 @@ using (var scope = app.Services.CreateScope())
     await AdminSeederService.SeedRoleAsync(roleManager);
 }
 
-
+/*
 app.UseExceptionHandler(errorApp =>
 {
     errorApp.Run(async context =>
@@ -70,6 +94,7 @@ app.UseExceptionHandler(errorApp =>
         }
     });
 });
+*/
 
 
 

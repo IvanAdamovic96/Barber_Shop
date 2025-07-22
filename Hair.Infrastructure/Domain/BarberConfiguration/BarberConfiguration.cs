@@ -14,14 +14,10 @@ public class BarberConfiguration : IEntityTypeConfiguration<Barber>
 
 
         builder.HasOne(b => b.Company)
-            .WithMany(c => c.Barbers);
+            .WithMany(c => c.Barbers)
+            .HasForeignKey(f=>f.CompanyId)
+            .OnDelete(DeleteBehavior.SetNull);
 
-        /*
-        builder.HasOne(b => b.ApplicationUser)
-            .WithOne(c=>c.Barber)
-            .HasForeignKey(b => b.ApplicationUserId)
-            .OnDelete(DeleteBehavior.Cascade);
-        */
 
     }
 }
