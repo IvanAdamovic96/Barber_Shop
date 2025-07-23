@@ -22,5 +22,22 @@ public class Haircut
         Company = company;
         return this;
     }
-    
+
+    public Haircut UpdateHaircutType(string haircutType)
+    {
+        HaircutType = haircutType;
+        return this;
+    }
+
+    public Haircut UpdatePrice(decimal price)
+    {
+        Price = price;
+        return this;
+    }
+
+    public Haircut UpdateDuration(int duration)
+    {
+        Duration = duration;
+        return this;
+    }
 }

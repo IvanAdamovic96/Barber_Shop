@@ -44,20 +44,26 @@ public class CompanyController(IHairDbContext dbContext): ApiBaseController
     {
         return Ok(await Mediator.Send(query));
     }
+    
+    [HttpPut("update-company")]
+    public async Task<IActionResult> UpdateCompanyAsync([FromForm] UpdateCompanyCommand command)
+    {
+        return Ok(await Mediator.Send(command));
+    }
 
+    [HttpDelete("delete-company")]
+    public async Task<IActionResult> DeleteCompanyByCompanyIdAsync([FromQuery] DeleteCompanyCommand command)
+    {
+        return Ok(await Mediator.Send(command));
+    }
+    
+    
+    /* Haircuts */
     [HttpPost("create-haircut")]
     public async Task<IActionResult> CreateHaircutAsync([FromForm] CreateHaircutCommand command)
     {
-        try
-        {
-            var result = await Mediator.Send(command);
-            return Ok(new { Message = result });
-        }
-        catch (Exception e)
-        {
-            return BadRequest(new { Message = e });
-        }
-        
+        var result = await Mediator.Send(command);
+        return Ok(result );
     }
 
     [HttpGet("get-all-haircuts-by-companyid")]
@@ -73,15 +79,17 @@ public class CompanyController(IHairDbContext dbContext): ApiBaseController
         return Ok(response);
     }
 
-    [HttpPut("update-company")]
-    public async Task<IActionResult> UpdateCompanyAsync([FromForm] UpdateCompanyCommand command)
+    [HttpPut("update-haircut")]
+    public async Task<IActionResult> UpdateHaircutAsync([FromForm] UpdateHaircutCommand updateHaircutCommand)
     {
-        return Ok(await Mediator.Send(command));
+        var response = await Mediator.Send(updateHaircutCommand);
+        return Ok(response);
     }
-
-    [HttpDelete("delete-company")]
-    public async Task<IActionResult> DeleteCompanyByCompanyIdAsync([FromQuery] DeleteCompanyCommand command)
+    
+    [HttpDelete("delete-haircut")]
+    public async Task<IActionResult> DeleteHaircutAsync([FromQuery] DeleteHaircutCommand deleteHaircutCommand)
     {
-        return Ok(await Mediator.Send(command));
+        var response = await Mediator.Send(deleteHaircutCommand);
+        return Ok(response);
     }
 }
