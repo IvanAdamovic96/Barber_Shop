@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "N+sMHezWtBDrrRctHEtsUFzUUfq3uzZTTfCcQhJL0D4=",
+  "Hash": "eQdij9xdgvhs21JKGwddrI2BaPmLAeu2wMCussIuZUk=",
   "Source": "Hair.Api",
   "BasePath": "_content/Hair.Api",
   "Mode": "Default",
@@ -17,12 +17,12 @@
   ],
   "Assets": [
     {
-      "Identity": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\4c7a92d9-79fe-4672-9caa-c615aa139110.jpg",
+      "Identity": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\a3c839e8-34d2-49fa-bf9c-24fc7d35a69a.jpg",
       "SourceId": "Hair.Api",
       "SourceType": "Discovered",
       "ContentRoot": "D:\\BarberApp3\\Hair.Api\\wwwroot\\",
       "BasePath": "_content/Hair.Api",
-      "RelativePath": "images/companies/4c7a92d9-79fe-4672-9caa-c615aa139110.jpg",
+      "RelativePath": "images/companies/a3c839e8-34d2-49fa-bf9c-24fc7d35a69a.jpg",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -33,26 +33,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\images\\companies\\4c7a92d9-79fe-4672-9caa-c615aa139110.jpg"
-    },
-    {
-      "Identity": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\ebc2cd7b-c927-418b-a060-380e8d6a7ad6.jpg",
-      "SourceId": "Hair.Api",
-      "SourceType": "Discovered",
-      "ContentRoot": "D:\\BarberApp3\\Hair.Api\\wwwroot\\",
-      "BasePath": "_content/Hair.Api",
-      "RelativePath": "images/companies/ebc2cd7b-c927-418b-a060-380e8d6a7ad6.jpg",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\images\\companies\\ebc2cd7b-c927-418b-a060-380e8d6a7ad6.jpg"
+      "OriginalItemSpec": "wwwroot\\images\\companies\\a3c839e8-34d2-49fa-bf9c-24fc7d35a69a.jpg"
     }
   ]
 }

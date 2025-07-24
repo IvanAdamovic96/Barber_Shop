@@ -25,7 +25,8 @@ public class AuthService(
         {
             throw new Exception("Lozinka nije validna");
         }
-
+        var barberId = await dbContext.Barbers.FirstOrDefaultAsync(x=>x.ApplicationUserId == user.Id, cancellationToken);
+        
         var ownersCompanies = await dbContext.ApplicationUserCompany
             .Where(i => i.ApplicationUserId == user.Id)
             .Select(c => c.CompanyId).ToListAsync();
@@ -34,7 +35,8 @@ public class AuthService(
 
         var roleName = Enum.GetName(typeof(Role), user.Role);
         var result = await signInManager.PasswordSignInAsync(user, loginDto.Password, isPersistent: false, lockoutOnFailure: false);
-        return new AuthResponseDto(user.Email, roleName, ownersCompanies);
+        return new AuthResponseDto(user.Id, user.FirstName, user.LastName, user.Email,user.PhoneNumber,
+             roleName, ownersCompanies, barberId.BarberId);
     }
 
     public async Task<AuthLevelDto> RegisterAsync(RegisterDto registerDto, CancellationToken cancellationToken)

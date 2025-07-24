@@ -1,12 +1,8 @@
 {
   "Files": [
     {
-      "Id": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\4c7a92d9-79fe-4672-9caa-c615aa139110.jpg",
-      "PackagePath": "staticwebassets\\images\\companies\\4c7a92d9-79fe-4672-9caa-c615aa139110.jpg"
-    },
-    {
-      "Id": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\ebc2cd7b-c927-418b-a060-380e8d6a7ad6.jpg",
-      "PackagePath": "staticwebassets\\images\\companies\\ebc2cd7b-c927-418b-a060-380e8d6a7ad6.jpg"
+      "Id": "D:\\BarberApp3\\Hair.Api\\wwwroot\\images\\companies\\a3c839e8-34d2-49fa-bf9c-24fc7d35a69a.jpg",
+      "PackagePath": "staticwebassets\\images\\companies\\a3c839e8-34d2-49fa-bf9c-24fc7d35a69a.jpg"
     },
     {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.Hair.Api.Microsoft.AspNetCore.StaticWebAssets.props",

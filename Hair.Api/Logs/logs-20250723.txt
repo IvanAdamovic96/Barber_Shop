@@ -11,3 +11,4 @@ Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Ambiguous HTTP meth
    at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
 2025-07-23 13:16:03 [Warning] Failed to determine the https port for redirect.
 2025-07-23 14:03:30 [Warning] Failed to determine the https port for redirect.
+2025-07-23 17:39:34 [Warning] Failed to determine the https port for redirect.

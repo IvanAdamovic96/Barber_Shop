@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace Hair.Domain.Entities;
 
@@ -9,6 +10,10 @@ public class Appointment
     public Guid Barberid { get; private set; }
     
     public string HaircutName { get; private set; }
+    
+    public string? ApplicationUserId { get; private set; }
+    [ForeignKey(nameof(ApplicationUserId))]
+    public ApplicationUser ApplicationUser { get; private set; }
 
     public Appointment(DateTime time, Guid barberid)
     {
@@ -27,6 +32,12 @@ public class Appointment
     public Appointment SetHaircutName(string haircutName)
     {
         HaircutName = haircutName;
+        return this;
+    }
+
+    public Appointment SetApplicationUserId(string userId)
+    {
+        ApplicationUserId = userId;
         return this;
     }
 

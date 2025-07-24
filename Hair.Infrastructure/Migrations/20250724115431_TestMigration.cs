@@ -28,20 +28,6 @@ namespace Hair.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Appointment",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Barberid = table.Column<Guid>(type: "uuid", nullable: false),
-                    HaircutName = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Appointment", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
@@ -115,6 +101,26 @@ namespace Hair.Infrastructure.Migrations
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Appointment",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Barberid = table.Column<Guid>(type: "uuid", nullable: false),
+                    HaircutName = table.Column<string>(type: "text", nullable: false),
+                    ApplicationUserId = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Appointment", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Appointment_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -283,6 +289,11 @@ namespace Hair.Infrastructure.Migrations
                 name: "IX_ApplicationUserCompany_CompanyId",
                 table: "ApplicationUserCompany",
                 column: "CompanyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Appointment_ApplicationUserId",
+                table: "Appointment",
+                column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

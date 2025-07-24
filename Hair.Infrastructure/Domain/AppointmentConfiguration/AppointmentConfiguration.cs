@@ -10,5 +10,9 @@ public class AppointmentConfiguration : IEntityTypeConfiguration<Appointment>
     {
         builder.ToTable("Appointment");
         builder.Property(x => x.Id).ValueGeneratedNever();
+
+        builder.HasOne(a => a.ApplicationUser)
+            .WithMany(ap => ap.Appointments)
+            .HasForeignKey(f => f.ApplicationUserId);
     }
 }

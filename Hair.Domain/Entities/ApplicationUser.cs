@@ -9,6 +9,8 @@ public class ApplicationUser : IdentityUser
     //public Guid? CompanyId { get; set; }
     public ICollection<ApplicationUserCompany> OwnedCompanies { get; set; }
     
+    public IList<Appointment> Appointments { get; set; } = new List<Appointment>();
+    
     public virtual Barber Barber { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }

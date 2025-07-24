@@ -143,6 +143,9 @@ namespace Hair.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("text");
+
                     b.Property<Guid>("Barberid")
                         .HasColumnType("uuid");
 
@@ -154,6 +157,8 @@ namespace Hair.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Appointment", (string)null);
                 });
@@ -399,6 +404,15 @@ namespace Hair.Infrastructure.Migrations
                     b.Navigation("Company");
                 });
 
+            modelBuilder.Entity("Hair.Domain.Entities.Appointment", b =>
+                {
+                    b.HasOne("Hair.Domain.Entities.ApplicationUser", "ApplicationUser")
+                        .WithMany("Appointments")
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.Navigation("ApplicationUser");
+                });
+
             modelBuilder.Entity("Hair.Domain.Entities.Barber", b =>
                 {
                     b.HasOne("Hair.Domain.Entities.ApplicationUser", "ApplicationUser")
@@ -481,6 +495,8 @@ namespace Hair.Infrastructure.Migrations
 
             modelBuilder.Entity("Hair.Domain.Entities.ApplicationUser", b =>
                 {
+                    b.Navigation("Appointments");
+
                     b.Navigation("Barber")
                         .IsRequired();
 
