@@ -181,6 +181,37 @@ public class ScheduleService(IHairDbContext dbContext,
 
         return list2;
     }
+
+    public async Task<string> DeleteAppointmentByAppointmentIdAsync(Guid appointmentId, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var appointment = await dbContext.Appointments.FirstOrDefaultAsync(x=> x.Id == appointmentId, cancellationToken);
+            if (appointment == null)
+            {
+                throw new Exception("Nije pronadjen termin za brisanje!");
+            }
+            dbContext.Appointments.Remove(appointment);
+            await dbContext.SaveChangesAsync(cancellationToken);
+
+            return "Uspešno obrisan termin!";
+
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+            Console.WriteLine(e);
+            throw;
+        }
+        
+        
+        
+    }
+
+    
+    
+    
+    
     
     private async Task<bool> IsWithinBarberWorkHours(ScheduleAppointmentCreateDto schedule, CancellationToken cancellationToken)
     {

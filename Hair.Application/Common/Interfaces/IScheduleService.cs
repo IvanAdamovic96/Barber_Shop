@@ -19,4 +19,9 @@ public interface IScheduleService
         Guid barberId,
         CancellationToken cancellationToken
     );
+
+    Task<string> DeleteAppointmentByAppointmentIdAsync(
+        Guid appointmentId,
+        CancellationToken cancellationToken
+    );
 }
