@@ -76,4 +76,11 @@ public class AuthController : ApiBaseController
     {
         return Ok(await Mediator.Send(query));
     }
+
+    [HttpGet("get-appointments-by-user-id")]
+    public async Task<IActionResult> GetAllAppointmentsByUserId([FromQuery] GetAllAppointmentsByUserIdQuery query)
+    {
+        var result = await Mediator.Send(query);
+        return Ok(result);
+    }
 }

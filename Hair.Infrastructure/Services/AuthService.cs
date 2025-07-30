@@ -229,8 +229,25 @@ public class AuthService(
             throw;
         }
     }
-    
-    
+
+    public async Task<List<GetAllAppointmentsByUserIdDto>> GetAllAppointmentsByUserIdAsync(string userId, CancellationToken cancellationToken)
+    {
+        var appointments = await dbContext.Appointments.Where(x => x.ApplicationUserId == userId)
+            .ToListAsync(cancellationToken);
+
+        var response = appointments.Select(x => new GetAllAppointmentsByUserIdDto(
+            AppointmentId: x.Id,
+            Time: x.Time,
+            HaircutName: x.HaircutName,
+            BarberName: dbContext.Barbers.Where(b => b.BarberId == x.Barberid).FirstOrDefault().BarberName,
+            BarberPhone: dbContext.Barbers.Where(b => b.BarberId == x.Barberid).FirstOrDefault().PhoneNumber,
+            BarberEmail: dbContext.Barbers.Where(b => b.BarberId == x.Barberid).FirstOrDefault().Email
+        )).ToList();
+
+        return response;
+    }
+
+
     public async Task<bool> CheckIfCompanyOwnerExistsAsync(Guid companyId, CancellationToken cancellationToken)
     {
         var exists = await dbContext.ApplicationUserCompany

@@ -19,4 +19,7 @@ public interface IAuthService
         CancellationToken cancellationToken);
     Task<List<CompanyDetailsDto>> GetCompaniesByOwnerEmailAsync(string email, 
         CancellationToken cancellationToken);
+    Task<List<GetAllAppointmentsByUserIdDto>> GetAllAppointmentsByUserIdAsync(string userId,
+        CancellationToken cancellationToken
+    );
 }
