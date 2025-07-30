@@ -22,6 +22,7 @@ public class ApiExceptionFilterAttribute: ExceptionFilterAttribute
             { typeof(NotFoundException), HandleNotFoundException },
             { typeof(UnauthorizedAccessException), HandleUnauthorizedAccessException },
             { typeof(AppointmentConflictException), HandleAppointmentConflictException },
+            { typeof(LoginException), HandleLoginException},
             { typeof(AppointmentConsecutiveException), AppointmentConsecutiveException }
         };
     }
@@ -32,6 +33,23 @@ public class ApiExceptionFilterAttribute: ExceptionFilterAttribute
         var details = new ProblemDetails
         {
             Title = "Nema dovoljno slobodnih uzastopnih termina u odabrano vreme",
+            Detail = context.Exception.Message,
+            Status = StatusCodes.Status400BadRequest
+        };
+
+        context.Result = new ObjectResult(details)
+        {
+            StatusCode = StatusCodes.Status400BadRequest
+        };
+
+        context.ExceptionHandled = true;
+    }
+
+    public void HandleLoginException(ExceptionContext context)
+    {
+        var details = new ProblemDetails
+        {
+            Title = "Login greška. Podaci nisu validni!",
             Detail = context.Exception.Message,
             Status = StatusCodes.Status400BadRequest
         };
@@ -66,21 +84,21 @@ public class ApiExceptionFilterAttribute: ExceptionFilterAttribute
     
     public override void OnException(ExceptionContext context)
     {
+        _logger.LogError(context.Exception, "Greška uhvaćena: {ExceptionType}", context.Exception.GetType().Name);
+        Console.WriteLine("Exception caught in filter: " + context.Exception.GetType().Name);
+        
         HandleException(context);
-
-        base.OnException(context);
+        //base.OnException(context);
     }
 
     private void HandleException(ExceptionContext context)
     {
         var type = context.Exception.GetType();
-        if (_exceptionHandlers.TryGetValue(type,
-                out var handler))
+        if (_exceptionHandlers.TryGetValue(type, out var handler))
         {
             handler.Invoke(context);
             return;
         }
-
         HandleUnknownException(context);
     }
 

@@ -53,20 +53,12 @@ public class ScheduleController: ApiBaseController
 
     }
     
+    
     [HttpPost ("CreateAppointment")]
     public async Task<ActionResult<Appointment>> CreateAppointmentAsync([FromForm] ScheduleAppointmentCommand command)
     {
-        try
-        {
-            var result = await Mediator.Send(command);
-            
-            return Ok(new { Message = "Successfully scheduled appointment.", Data = result });
-        }
-        catch (Exception ex)
-        {
-           
-            return BadRequest(new { Message = ex.Message });
-        }
+        var result = await Mediator.Send(command);
+        return Ok(new { Message = "Uspešno zakazan termin.", Data = result });
     }
     
     [HttpGet ("GetAllUsedAppointments")]

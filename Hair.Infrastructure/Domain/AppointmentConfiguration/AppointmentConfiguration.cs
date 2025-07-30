@@ -14,5 +14,6 @@ public class AppointmentConfiguration : IEntityTypeConfiguration<Appointment>
         builder.HasOne(a => a.ApplicationUser)
             .WithMany(ap => ap.Appointments)
             .HasForeignKey(f => f.ApplicationUserId);
+            //.OnDelete(DeleteBehavior.Cascade);
     }
 }

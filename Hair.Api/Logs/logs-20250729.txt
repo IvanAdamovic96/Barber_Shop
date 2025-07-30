@@ -1,0 +1,176 @@
+2025-07-29 14:49:36 [Warning] Failed to determine the https port for redirect.
+2025-07-29 14:49:58 [Error] Greška uhvaćena: "ArgumentNullException"
+System.ArgumentNullException: Value cannot be null. (Parameter 'input')
+   at System.Text.RegularExpressions.ThrowHelper.ThrowArgumentNullException(ExceptionArgument arg)
+   at System.Text.RegularExpressions.Regex.IsMatch(String input)
+   at Hair.Infrastructure.Services.BarberService.IsValidSerbianPhoneNumber(String phoneNumber) in D:\BarberApp3\Hair.Infrastructure\Services\BarberService.cs:line 209
+   at Hair.Application.Common.Validators.ApplicationUserDtoValidator.<>c__DisplayClass1_0.<.ctor>b__3(String phone) in D:\BarberApp3\Hair.Application\Common\Validators\ApplicationUserDtoValidator.cs:line 20
+   at FluentValidation.DefaultValidatorExtensions.<>c__DisplayClass27_0`2.<Must>b__0(T x, TProperty val) in /_/src/FluentValidation/DefaultValidatorExtensions.cs:line 421
+   at FluentValidation.DefaultValidatorExtensions.<>c__DisplayClass28_0`2.<Must>b__0(T x, TProperty val, ValidationContext`1 _) in /_/src/FluentValidation/DefaultValidatorExtensions.cs:line 437
+   at FluentValidation.DefaultValidatorExtensions.<>c__DisplayClass29_0`2.<Must>b__0(T instance, TProperty property, ValidationContext`1 propertyValidatorContext) in /_/src/FluentValidation/DefaultValidatorExtensions.cs:line 453
+   at FluentValidation.Validators.PredicateValidator`2.IsValid(ValidationContext`1 context, TProperty value) in /_/src/FluentValidation/Validators/PredicateValidator.cs:line 37
+   at FluentValidation.Internal.RuleComponent`2.InvokePropertyValidator(ValidationContext`1 context, TProperty value) in /_/src/FluentValidation/Internal/RuleComponent.cs:line 92
+   at FluentValidation.Internal.RuleComponent`2.ValidateAsync(ValidationContext`1 context, TProperty value, Boolean useAsync, CancellationToken cancellation) in /_/src/FluentValidation/Internal/RuleComponent.cs:line 83
+   at FluentValidation.Internal.PropertyRule`2.ValidateAsync(ValidationContext`1 context, Boolean useAsync, CancellationToken cancellation) in /_/src/FluentValidation/Internal/PropertyRule.cs:line 143
+   at FluentValidation.AbstractValidator`1.ValidateInternalAsync(ValidationContext`1 context, Boolean useAsync, CancellationToken cancellation) in /_/src/FluentValidation/AbstractValidator.cs:line 241
+   at FluentValidation.AbstractValidator`1.Validate(ValidationContext`1 context) in /_/src/FluentValidation/AbstractValidator.cs:line 202
+   at FluentValidation.AbstractValidator`1.FluentValidation.IValidator.Validate(IValidationContext context) in /_/src/FluentValidation/AbstractValidator.cs:line 153
+   at FluentValidation.Validators.ChildValidatorAdaptor`2.IsValid(ValidationContext`1 context, TProperty value) in /_/src/FluentValidation/Validators/ChildValidatorAdaptor.cs:line 56
+   at FluentValidation.Internal.RuleComponent`2.InvokePropertyValidator(ValidationContext`1 context, TProperty value) in /_/src/FluentValidation/Internal/RuleComponent.cs:line 92
+   at FluentValidation.Internal.RuleComponent`2.ValidateAsync(ValidationContext`1 context, TProperty value, Boolean useAsync, CancellationToken cancellation) in /_/src/FluentValidation/Internal/RuleComponent.cs:line 83
+   at FluentValidation.Internal.PropertyRule`2.ValidateAsync(ValidationContext`1 context, Boolean useAsync, CancellationToken cancellation) in /_/src/FluentValidation/Internal/PropertyRule.cs:line 143
+   at FluentValidation.AbstractValidator`1.ValidateInternalAsync(ValidationContext`1 context, Boolean useAsync, CancellationToken cancellation) in /_/src/FluentValidation/AbstractValidator.cs:line 241
+   at FluentValidation.AbstractValidator`1.Validate(ValidationContext`1 context) in /_/src/FluentValidation/AbstractValidator.cs:line 202
+   at FluentValidation.AbstractValidator`1.FluentValidation.IValidator.Validate(IValidationContext context) in /_/src/FluentValidation/AbstractValidator.cs:line 153
+   at FluentValidation.AspNetCore.FluentValidationModelValidator.Validate(ModelValidationContext mvContext) in /_/src/FluentValidation.AspNetCore/FluentValidationModelValidatorProvider.cs:line 146
+   at Microsoft.AspNetCore.Mvc.ModelBinding.Validation.ValidationVisitor.ValidateNode()
+   at Microsoft.AspNetCore.Mvc.ModelBinding.Validation.ValidationVisitor.VisitComplexType(IValidationStrategy defaultStrategy)
+   at Microsoft.AspNetCore.Mvc.ModelBinding.Validation.ValidationVisitor.VisitImplementation(ModelMetadata& metadata, String& key, Object model)
+   at Microsoft.AspNetCore.Mvc.ModelBinding.Validation.ValidationVisitor.Visit(ModelMetadata metadata, String key, Object model)
+   at FluentValidation.AspNetCore.FluentValidationVisitor.<>n__1(ModelMetadata metadata, String key, Object model, Boolean alwaysValidateAtTopLevel, Object container)
+   at FluentValidation.AspNetCore.FluentValidationVisitor.<>c__DisplayClass2_0.<Validate>g__BaseValidate|0() in /_/src/FluentValidation.AspNetCore/FluentValidationVisitor.cs:line 45
+   at FluentValidation.AspNetCore.FluentValidationVisitor.ValidateInternal(ModelMetadata metadata, String key, Object model, Func`1 continuation) in /_/src/FluentValidation.AspNetCore/FluentValidationVisitor.cs:line 63
+   at FluentValidation.AspNetCore.FluentValidationVisitor.Validate(ModelMetadata metadata, String key, Object model, Boolean alwaysValidateAtTopLevel, Object container) in /_/src/FluentValidation.AspNetCore/FluentValidationVisitor.cs:line 47
+   at Microsoft.AspNetCore.Mvc.ModelBinding.ObjectModelValidator.Validate(ActionContext actionContext, ValidationStateDictionary validationState, String prefix, Object model, ModelMetadata metadata, Object container)
+   at Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.EnforceBindRequiredAndValidate(ObjectModelValidator baseObjectValidator, ActionContext actionContext, ParameterDescriptor parameter, ModelMetadata metadata, ModelBindingContext modelBindingContext, ModelBindingResult modelBindingResult, Object container)
+   at Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.BindModelAsync(ActionContext actionContext, IModelBinder modelBinder, IValueProvider valueProvider, ParameterDescriptor parameter, ModelMetadata metadata, Object value, Object container)
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerBinderDelegateProvider.<>c__DisplayClass0_0.<<CreateBinderDelegate>g__Bind|0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextExceptionFilterAsync>g__Awaited|26_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+2025-07-29 14:50:15 [Error] Greška uhvaćena: "Exception"
+System.Exception: Email adresa nije validna.
+   at Hair.Infrastructure.Services.AuthService.Login(LoginDto loginDto, CancellationToken cancellationToken) in D:\BarberApp3\Hair.Infrastructure\Services\AuthService.cs:line 24
+   at Hair.Application.Auth.Commands.LoginCommandHandler.Handle(LoginCommand request, CancellationToken cancellationToken) in D:\BarberApp3\Hair.Application\Auth\Commands\LoginCommand.cs:line 13
+   at Hair.Application.Behaviours.ValidationBehaviour`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken) in D:\BarberApp3\Hair.Application\Behaviours\ValidationBehaviour.cs:line 14
+   at Hair.Api.Controllers.AuthController.Login(LoginCommand loginCommand) in D:\BarberApp3\Hair.Api\Controllers\AuthController.cs:line 16
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextExceptionFilterAsync>g__Awaited|26_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+2025-07-29 14:50:36 [Error] Greška uhvaćena: "Exception"
+System.Exception: Email adresa nije validna.
+   at Hair.Infrastructure.Services.AuthService.Login(LoginDto loginDto, CancellationToken cancellationToken) in D:\BarberApp3\Hair.Infrastructure\Services\AuthService.cs:line 24
+   at Hair.Application.Auth.Commands.LoginCommandHandler.Handle(LoginCommand request, CancellationToken cancellationToken) in D:\BarberApp3\Hair.Application\Auth\Commands\LoginCommand.cs:line 13
+   at Hair.Application.Behaviours.ValidationBehaviour`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken) in D:\BarberApp3\Hair.Application\Behaviours\ValidationBehaviour.cs:line 14
+   at Hair.Api.Controllers.AuthController.Login(LoginCommand loginCommand) in D:\BarberApp3\Hair.Api\Controllers\AuthController.cs:line 16
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextExceptionFilterAsync>g__Awaited|26_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+2025-07-29 14:51:09 [Error] Greška uhvaćena: "Exception"
+System.Exception: Email adresa nije validna.
+   at Hair.Infrastructure.Services.AuthService.Login(LoginDto loginDto, CancellationToken cancellationToken)
+   at Hair.Application.Auth.Commands.LoginCommandHandler.Handle(LoginCommand request, CancellationToken cancellationToken) in D:\BarberApp3\Hair.Application\Auth\Commands\LoginCommand.cs:line 13
+   at Hair.Application.Behaviours.ValidationBehaviour`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken) in D:\BarberApp3\Hair.Application\Behaviours\ValidationBehaviour.cs:line 14
+   at Hair.Api.Controllers.AuthController.Login(LoginCommand loginCommand) in D:\BarberApp3\Hair.Api\Controllers\AuthController.cs:line 16
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextExceptionFilterAsync>g__Awaited|26_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+2025-07-29 14:52:33 [Error] Greška uhvaćena: "Exception"
+System.Exception: Email adresa nije validna.
+   at Hair.Infrastructure.Services.AuthService.Login(LoginDto loginDto, CancellationToken cancellationToken)
+   at Hair.Application.Auth.Commands.LoginCommandHandler.Handle(LoginCommand request, CancellationToken cancellationToken) in D:\BarberApp3\Hair.Application\Auth\Commands\LoginCommand.cs:line 13
+   at Hair.Application.Behaviours.ValidationBehaviour`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken) in D:\BarberApp3\Hair.Application\Behaviours\ValidationBehaviour.cs:line 14
+   at Hair.Api.Controllers.AuthController.Login(LoginCommand loginCommand) in D:\BarberApp3\Hair.Api\Controllers\AuthController.cs:line 16
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextExceptionFilterAsync>g__Awaited|26_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+2025-07-29 14:53:29 [Error] Email adresa nije validna.
+2025-07-29 14:53:29 [Error] Greška uhvaćena: "LoginException"
+Hair.Application.Common.Exceptions.LoginException: Email adresa nije validna.
+   at Hair.Infrastructure.Services.AuthService.Login(LoginDto loginDto, CancellationToken cancellationToken)
+   at Hair.Application.Auth.Commands.LoginCommandHandler.Handle(LoginCommand request, CancellationToken cancellationToken) in D:\BarberApp3\Hair.Application\Auth\Commands\LoginCommand.cs:line 13
+   at Hair.Application.Behaviours.ValidationBehaviour`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken) in D:\BarberApp3\Hair.Application\Behaviours\ValidationBehaviour.cs:line 14
+   at Hair.Api.Controllers.AuthController.Login(LoginCommand loginCommand) in D:\BarberApp3\Hair.Api\Controllers\AuthController.cs:line 16
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextExceptionFilterAsync>g__Awaited|26_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+2025-07-29 14:56:24 [Error] Lozinka nije validna.
+2025-07-29 14:56:24 [Error] Greška uhvaćena: "LoginException"
+Hair.Application.Common.Exceptions.LoginException: Lozinka nije validna.
+   at Hair.Infrastructure.Services.AuthService.Login(LoginDto loginDto, CancellationToken cancellationToken)
+   at Hair.Application.Auth.Commands.LoginCommandHandler.Handle(LoginCommand request, CancellationToken cancellationToken) in D:\BarberApp3\Hair.Application\Auth\Commands\LoginCommand.cs:line 13
+   at Hair.Application.Behaviours.ValidationBehaviour`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken) in D:\BarberApp3\Hair.Application\Behaviours\ValidationBehaviour.cs:line 14
+   at Hair.Api.Controllers.AuthController.Login(LoginCommand loginCommand) in D:\BarberApp3\Hair.Api\Controllers\AuthController.cs:line 16
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextExceptionFilterAsync>g__Awaited|26_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+2025-07-29 14:58:40 [Error] Pogrešno uneti podaci.
+2025-07-29 14:58:40 [Error] Greška uhvaćena: "LoginException"
+Hair.Application.Common.Exceptions.LoginException: Pogrešno uneti podaci.
+   at Hair.Infrastructure.Services.AuthService.Login(LoginDto loginDto, CancellationToken cancellationToken)
+   at Hair.Application.Auth.Commands.LoginCommandHandler.Handle(LoginCommand request, CancellationToken cancellationToken) in D:\BarberApp3\Hair.Application\Auth\Commands\LoginCommand.cs:line 13
+   at Hair.Application.Behaviours.ValidationBehaviour`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken) in D:\BarberApp3\Hair.Application\Behaviours\ValidationBehaviour.cs:line 14
+   at Hair.Api.Controllers.AuthController.Login(LoginCommand loginCommand) in D:\BarberApp3\Hair.Api\Controllers\AuthController.cs:line 16
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextExceptionFilterAsync>g__Awaited|26_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+2025-07-29 14:58:44 [Error] Pogrešno uneti podaci.
+2025-07-29 14:58:44 [Error] Greška uhvaćena: "LoginException"
+Hair.Application.Common.Exceptions.LoginException: Pogrešno uneti podaci.
+   at Hair.Infrastructure.Services.AuthService.Login(LoginDto loginDto, CancellationToken cancellationToken)
+   at Hair.Application.Auth.Commands.LoginCommandHandler.Handle(LoginCommand request, CancellationToken cancellationToken) in D:\BarberApp3\Hair.Application\Auth\Commands\LoginCommand.cs:line 13
+   at Hair.Application.Behaviours.ValidationBehaviour`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken) in D:\BarberApp3\Hair.Application\Behaviours\ValidationBehaviour.cs:line 14
+   at Hair.Api.Controllers.AuthController.Login(LoginCommand loginCommand) in D:\BarberApp3\Hair.Api\Controllers\AuthController.cs:line 16
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextExceptionFilterAsync>g__Awaited|26_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+2025-07-29 14:58:54 [Error] Pogrešno uneti podaci.
+2025-07-29 14:58:54 [Error] Greška uhvaćena: "LoginException"
+Hair.Application.Common.Exceptions.LoginException: Pogrešno uneti podaci.
+   at Hair.Infrastructure.Services.AuthService.Login(LoginDto loginDto, CancellationToken cancellationToken)
+   at Hair.Application.Auth.Commands.LoginCommandHandler.Handle(LoginCommand request, CancellationToken cancellationToken) in D:\BarberApp3\Hair.Application\Auth\Commands\LoginCommand.cs:line 13
+   at Hair.Application.Behaviours.ValidationBehaviour`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken) in D:\BarberApp3\Hair.Application\Behaviours\ValidationBehaviour.cs:line 14
+   at Hair.Api.Controllers.AuthController.Login(LoginCommand loginCommand) in D:\BarberApp3\Hair.Api\Controllers\AuthController.cs:line 16
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextExceptionFilterAsync>g__Awaited|26_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+2025-07-29 14:58:59 [Error] Pogrešno uneti podaci.
+2025-07-29 14:58:59 [Error] Greška uhvaćena: "LoginException"
+Hair.Application.Common.Exceptions.LoginException: Pogrešno uneti podaci.
+   at Hair.Infrastructure.Services.AuthService.Login(LoginDto loginDto, CancellationToken cancellationToken)
+   at Hair.Application.Auth.Commands.LoginCommandHandler.Handle(LoginCommand request, CancellationToken cancellationToken) in D:\BarberApp3\Hair.Application\Auth\Commands\LoginCommand.cs:line 13
+   at Hair.Application.Behaviours.ValidationBehaviour`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken) in D:\BarberApp3\Hair.Application\Behaviours\ValidationBehaviour.cs:line 14
+   at Hair.Api.Controllers.AuthController.Login(LoginCommand loginCommand) in D:\BarberApp3\Hair.Api\Controllers\AuthController.cs:line 16
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextExceptionFilterAsync>g__Awaited|26_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)

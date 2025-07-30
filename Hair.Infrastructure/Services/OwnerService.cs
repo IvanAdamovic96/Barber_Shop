@@ -2,10 +2,11 @@
 using Hair.Application.Common.Interfaces;
 using Hair.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Hair.Infrastructure.Services;
 
-public class OwnerService(IHairDbContext dbContext) : IOwnerService
+public class OwnerService(IHairDbContext dbContext, ILogger<OwnerService> _logger) : IOwnerService
 {
     public async Task<string> CreateHaircutByOwner(HaircutDto haircutDto, CancellationToken cancellationToken)
     {
@@ -20,6 +21,7 @@ public class OwnerService(IHairDbContext dbContext) : IOwnerService
         }
         catch (Exception e)
         {
+            _logger.LogError(e.Message);
             Console.WriteLine(e);
             throw new Exception("Greška prilikom kreiranja usluge! ", e);
         }
@@ -31,23 +33,21 @@ public class OwnerService(IHairDbContext dbContext) : IOwnerService
         {
             var haircutToUpdate = await dbContext.Haircuts.FirstOrDefaultAsync(x => x.Id == haircutResponseDto.HaircutId,
                 cancellationToken);
-
             if (haircutToUpdate == null)
             {
                 throw new Exception("Nije pronadjena usluga za izmenu!");
             }
-            
             haircutToUpdate.UpdateHaircutType(haircutResponseDto.HaircutType);
             haircutToUpdate.UpdatePrice(haircutResponseDto.Price);
             haircutToUpdate.UpdateDuration(haircutResponseDto.Duration);
-        
             await dbContext.SaveChangesAsync(cancellationToken);
         
             return "Uspešno izmenjena usluga!";
         }
         catch (Exception e)
         {
-            throw new Exception(e.Message);
+            _logger.LogError(e.Message);
+            throw;
         }
     }
 
@@ -67,7 +67,8 @@ public class OwnerService(IHairDbContext dbContext) : IOwnerService
         }
         catch (Exception e)
         {
-            throw new Exception(e.Message);
+            _logger.LogError(e.Message);
+            throw;
         }
     }
 }

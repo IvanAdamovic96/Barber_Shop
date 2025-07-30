@@ -9,70 +9,88 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Hair.Infrastructure.Services;
 
-public class CompanyService (IHairDbContext dbContext, IWebHostEnvironment hostEnvironment) : ICompanyService
+public class CompanyService (IHairDbContext dbContext, IWebHostEnvironment hostEnvironment,
+                            ILogger<CompanyService> _logger) : ICompanyService
 {
-    
     public async Task<List<string>> UploadImageAsync([FromForm] IList<IFormFile> images)
     {
-        if (images == null || images.Count == 0)
-            throw new ArgumentException("Image file is empty.");
-
-        // folder: wwwroot/images/companies
-        var folderName = Path.Combine("wwwroot", "images", "companies");
-        var folderPath = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-
-        if (!Directory.Exists(folderPath))
+        try
         {
-            Directory.CreateDirectory(folderPath);
-        }
-
-        var urls = new List<string>();
-        for (int i = 0; i < images.Count; i++)
-        {
-            var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(images[i].FileName);
-            var filePath = Path.Combine(folderPath, uniqueFileName);
             
-            using (var stream = new FileStream(filePath, FileMode.Create))
+            if (images == null || images.Count == 0)
+                throw new ArgumentException("Image file is empty.");
+
+            // folder: wwwroot/images/companies
+            var folderName = Path.Combine("wwwroot", "images", "companies");
+            var folderPath = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+
+            if (!Directory.Exists(folderPath))
             {
-                await images[i].CopyToAsync(stream);
+                Directory.CreateDirectory(folderPath);
             }
-            var fullUrl = $"http://localhost:5045/images/companies/{uniqueFileName}";
-            urls.Add(fullUrl);
+
+            var urls = new List<string>();
+            for (int i = 0; i < images.Count; i++)
+            {
+                var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(images[i].FileName);
+                var filePath = Path.Combine(folderPath, uniqueFileName);
+            
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await images[i].CopyToAsync(stream);
+                }
+                var fullUrl = $"http://localhost:5045/images/companies/{uniqueFileName}";
+                urls.Add(fullUrl);
+            }
+        
+            return urls;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message, "Greska koja se dogodila u Company Servisu");
+            Console.WriteLine(e);
+            throw;
         }
         
-        return urls;
     }
     
     public async Task<CompanyCreateDto> CreateCompanyAsync(string companyName, IList<IFormFile?> image,
         CancellationToken cancellationToken)
     {
-        var x = await dbContext.Companies.Where(c => c.CompanyName == companyName)
-            .FirstOrDefaultAsync();
-        if (x is  not null)
+        try
         {
-            throw new Exception($"Company {companyName} already exists");
-        }
-
-        IList<string?> imageUrl = null;
-        imageUrl = await UploadImageAsync(image);
-        /*
-        for (int i = 0; i < image.Count; i++)
-        {
-            if (image is not null)
+            var x = await dbContext.Companies.Where(c => c.CompanyName == companyName)
+                .FirstOrDefaultAsync();
+            if (x is  not null)
             {
-                
+                throw new Exception($"Kompanija: {companyName} već postoji!");
             }
-        }*/
-        
-        Company company = new Company(companyName);
-        company.AddImage(imageUrl);
-        
-        dbContext.Companies.Add(company);
-        await dbContext.SaveChangesAsync(cancellationToken);
-        return new CompanyCreateDto(company.CompanyName, company.ImageUrl);
+            IList<string?> imageUrl = null;
+            imageUrl = await UploadImageAsync(image);
+            /*
+            for (int i = 0; i < image.Count; i++)
+            {
+                if (image is not null)
+                {
+
+                }
+            }*/
+            Company company = new Company(companyName);
+            company.AddImage(imageUrl);
+            dbContext.Companies.Add(company);
+            await dbContext.SaveChangesAsync(cancellationToken);
+            return new CompanyCreateDto(company.CompanyName, company.ImageUrl);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+            Console.WriteLine(e);
+            throw;
+        }
     }
 
     public async Task<List<BarberFullDetailsDto>> CompanyDetailsByIdAsync(Guid companyId, CancellationToken cancellationToken)
@@ -80,13 +98,11 @@ public class CompanyService (IHairDbContext dbContext, IWebHostEnvironment hostE
         var barbers = await dbContext.Barbers.Include(x => x.Company)
             .Where(x => x.Company.Id == companyId)
             .ToListAsync(cancellationToken);
-
-
+        
         if (barbers == null || barbers.Count == 0)
         {
             return new List<BarberFullDetailsDto>();
         }
-
         return barbers.Select(barber =>
             new BarberFullDetailsDto(barber.BarberId, barber.BarberName, barber.Company.CompanyName)).ToList();
     }
@@ -94,7 +110,6 @@ public class CompanyService (IHairDbContext dbContext, IWebHostEnvironment hostE
     public async Task<List<CompanyDetailsDto>> GetAllCompaniesAsync(CompanyDetailsDto companyDetailsDto, CancellationToken cancellationToken)
     {
         var companies = await dbContext.Companies.ToListAsync(cancellationToken);
-
         var result = companies.Select(x => new CompanyDetailsDto()
         {
             CompanyId = x.Id,
@@ -110,8 +125,6 @@ public class CompanyService (IHairDbContext dbContext, IWebHostEnvironment hostE
         var toReturnCompanyDetails = new CompanyDetailsDto(company.Id, company.CompanyName, company.ImageUrl);
         return toReturnCompanyDetails;
     }
-
-    
     
     public async Task<string> UpdateCompanyAsync(UpdateCompanyDto updateCompanyDto, CancellationToken cancellationToken)
     {
@@ -121,7 +134,7 @@ public class CompanyService (IHairDbContext dbContext, IWebHostEnvironment hostE
                 .FirstOrDefaultAsync(cancellationToken);
             if (companyToUpdate is null)
             {
-                throw new Exception($"Company {updateCompanyDto.CompanyName} does not exist");
+                throw new Exception($"Kompanija: {updateCompanyDto.CompanyName} ne postoji!");
             }
             companyToUpdate.UpdateCompanyName(updateCompanyDto.CompanyName);
             var currentImageUrls = companyToUpdate.ImageUrl.ToList();
@@ -151,7 +164,6 @@ public class CompanyService (IHairDbContext dbContext, IWebHostEnvironment hostE
                     }
                 }
             }
-
             if (updateCompanyDto.NewImages != null && updateCompanyDto.NewImages.Any())
             {
                 var newUploadedImages = await UploadImageAsync(updateCompanyDto.NewImages);
@@ -162,10 +174,7 @@ public class CompanyService (IHairDbContext dbContext, IWebHostEnvironment hostE
                         currentImageUrls.Add(newUrl);
                     }
                 }
-                //keptImages.AddRange(newUploadedImages.Where(url => !string.IsNullOrWhiteSpace(url)));
             }
-            //IList<string?> newImageUrls = null;
-            //newImageUrls = await UploadImageAsync(updateCompanyDto.NewImages);
             companyToUpdate.AddImage(currentImageUrls);
             if (!companyToUpdate.ImageUrl.Any())
             {
@@ -176,31 +185,26 @@ public class CompanyService (IHairDbContext dbContext, IWebHostEnvironment hostE
         }
         catch (Exception e)
         {
-            throw new Exception($"Error updating company {updateCompanyDto.CompanyName} ", e);
+            _logger.LogError(e.Message);
+            throw;
         }
     }
-
-    
     
     public async Task<string> DeleteCompanyByCompanyIdAsync(Guid companyId, CancellationToken cancellationToken)
     {
         try
         {
             var companyToDelete = await dbContext.Companies.Where(c => c.Id == companyId).FirstOrDefaultAsync(cancellationToken);
-        
             if (companyToDelete == null)
             {
-                throw new Exception($"Company {companyId} does not exist");
+                throw new Exception($"Kompanija: {companyId} ne postoji!");
             }
-
             if (companyToDelete.ImageUrl != null && companyToDelete.ImageUrl.Any())
             {
                 foreach (var image in companyToDelete.ImageUrl)
                 {
                     if (string.IsNullOrWhiteSpace(image)) continue;
-
                     var relativePath = image.Replace("http://localhost:5045/", "");
-
                     if (relativePath.StartsWith("images/companies/", StringComparison.OrdinalIgnoreCase))
                     {
                         var filePath = Path.Combine(hostEnvironment.WebRootPath, relativePath);
@@ -219,19 +223,16 @@ public class CompanyService (IHairDbContext dbContext, IWebHostEnvironment hostE
                     }
                 }
             }
-            
             dbContext.Companies.Remove(companyToDelete);
             await dbContext.SaveChangesAsync(cancellationToken);
-            return $"Successfully deleted company with {companyId}";
+            return $"Uspešno obrisana kompanija: {companyToDelete.CompanyName}";
         }
         catch (Exception e)
         {
-            throw new Exception($"Failed to delete company {companyId}", e);
+            _logger.LogError("Greska koja se dogodila u Company Servisu");
+            throw;
         }
         
     }
-    
-    
-    
     
 }

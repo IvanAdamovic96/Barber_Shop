@@ -14,15 +14,8 @@ public class BarberController(IHairDbContext dbContext) : ApiBaseController
     [HttpPost("create")]
     public async Task<ActionResult<Barber>> CreateBarberAsync(BarberCreateCommand command)
     {
-        try
-        {
-            var result = await Mediator.Send(command);
-            return Ok(new { Message = "Barber created.", Data = result });
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { Message = ex.Message });
-        }
+        var result = await Mediator.Send(command);
+        return Ok(new { Message = "Frizer uspešno kreiran.", Data = result });
     }
     
     [HttpGet("getAllBarbersByCompanyId")]

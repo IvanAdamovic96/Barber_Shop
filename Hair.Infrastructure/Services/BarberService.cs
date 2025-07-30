@@ -7,84 +7,69 @@ using Hair.Domain.Entities;
 using Hair.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Hair.Infrastructure.Services;
 
-public class BarberService (IHairDbContext dbContext, UserManager<ApplicationUser> userManager) : IBarberService
+public class BarberService (IHairDbContext dbContext, UserManager<ApplicationUser> userManager, 
+    ILogger<BarberService> _logger) : IBarberService
 {
     public async Task<BarberResponseDto> BarberCreateAsync(BarberCreateDto barberCreateDto, CancellationToken cancellationToken)
     {
-        var company = await dbContext.Companies.Where(x => x.Id == barberCreateDto.companyId).FirstOrDefaultAsync(cancellationToken);
+        try
+        {
+            var company = await dbContext.Companies.Where(x => x.Id == barberCreateDto.companyId).FirstOrDefaultAsync(cancellationToken);
         
-        var applicationUser = new ApplicationUser
-        {
-            UserName = barberCreateDto.email,
-            Email = barberCreateDto.email,
-            PhoneNumber = barberCreateDto.phoneNumber,
-            FirstName = barberCreateDto.barberName,
-            LastName = barberCreateDto.barberName,
-            Role = Role.Barber
-        };
-        var result = await userManager.CreateAsync(applicationUser, barberCreateDto.password);
-        if (!result.Succeeded)
-        {
-            throw new Exception(
-                "Failed to create identity user: " + string.Join(", ", result.Errors.Select(e => e.Description))
+            var applicationUser = new ApplicationUser
+            {
+                UserName = barberCreateDto.email,
+                Email = barberCreateDto.email,
+                PhoneNumber = barberCreateDto.phoneNumber,
+                FirstName = barberCreateDto.barberName,
+                LastName = barberCreateDto.barberName,
+                Role = Role.Barber
+            };
+            var result = await userManager.CreateAsync(applicationUser, barberCreateDto.password);
+            if (!result.Succeeded)
+            {
+                throw new Exception(
+                    "Failed to create identity user: " + string.Join(", ", result.Errors.Select(e => e.Description))
+                );
+            }
+
+
+            Barber barber = new Barber(
+                barberCreateDto.barberName,
+                barberCreateDto.phoneNumber,
+                barberCreateDto.email,
+                barberCreateDto.individualStartTime,
+                barberCreateDto.individualEndTime
             );
+
+            if (!IsValidEmail(barberCreateDto.email))
+            {
+                throw new Exception("Nevažeći format email adrese!");
+            }
+
+            if (!IsValidSerbianPhoneNumber(barberCreateDto.phoneNumber))
+            {
+                throw new Exception("Nevažeći format broja telefona!");
+            }
+            var barberSaved = barberCreateDto.FromCreateDtoToEntityBarber().AddBarberCompany(company);
+            barberSaved.SetApplicationUserId(applicationUser.Id);
+            dbContext.Barbers.Add(barberSaved);
+            await dbContext.SaveChangesAsync(cancellationToken);
+            return new BarberResponseDto(barber.BarberId, barber.BarberName, barber.PhoneNumber, barber.Email,
+                barber.IndividualStartTime, barber.IndividualEndTime);
         }
-
-
-        Barber barber = new Barber(
-            barberCreateDto.barberName,
-            barberCreateDto.phoneNumber,
-            barberCreateDto.email,
-            barberCreateDto.individualStartTime,
-            barberCreateDto.individualEndTime
-        );
-
-        if (!IsValidEmail(barberCreateDto.email))
+        catch (Exception e)
         {
-            throw new Exception("Invalid email address");
+            _logger.LogError(e.Message);
+            Console.WriteLine(e);
+            throw;
         }
-
-        if (!IsValidSerbianPhoneNumber(barberCreateDto.phoneNumber))
-        {
-            throw new Exception("Invalid phone number");
-        }
-        var barberSaved = barberCreateDto.FromCreateDtoToEntityBarber().AddBarberCompany(company);
-        barberSaved.SetApplicationUserId(applicationUser.Id);
-        dbContext.Barbers.Add(barberSaved);
-        await dbContext.SaveChangesAsync(cancellationToken);
-        return new BarberResponseDto(barber.BarberId, barber.BarberName, barber.PhoneNumber, barber.Email,
-            barber.IndividualStartTime, barber.IndividualEndTime);
         
-        /*
-        var company = await dbContext.Companies.Where(x => x.Id == barberCreateDto.companyId).FirstOrDefaultAsync(cancellationToken);
-
-        Barber barber = new Barber(
-            barberCreateDto.barberName,
-            barberCreateDto.phoneNumber,
-            barberCreateDto.email,
-            barberCreateDto.individualStartTime,
-            barberCreateDto.individualEndTime)
-            .AddBarberCompany(company);
-
-        if (!IsValidEmail(barberCreateDto.email))
-        {
-            throw new Exception("Invalid email address");
-        }
-
-        if (!IsValidSerbianPhoneNumber(barberCreateDto.phoneNumber))
-        {
-            throw new Exception("Invalid phone number");
-        }
-
-        var barberSaved = barberCreateDto.FromCreateDtoToEntityBarber().AddBarberCompany(company);
-        dbContext.Barbers.Add(barberSaved);
-        await dbContext.SaveChangesAsync(cancellationToken);
-        return new BarberCreateDto(barberSaved.BarberId,barber.BarberName, barber.PhoneNumber,
-                                barber.Email, barber.IndividualStartTime, barber.IndividualEndTime);
-        */
+        
     }
     
 
@@ -114,7 +99,7 @@ public class BarberService (IHairDbContext dbContext, UserManager<ApplicationUse
 
             if (barber == null)
             {
-                throw new Exception($"Barber with id {updateBarberDto.BarberId} was not found");
+                throw new Exception($"Frizer sa id-jem {updateBarberDto.BarberId} nije pronadjen!");
             }
             var appBarberUser = await userManager.FindByIdAsync(barber.ApplicationUserId);
             if (appBarberUser == null)
@@ -143,7 +128,8 @@ public class BarberService (IHairDbContext dbContext, UserManager<ApplicationUse
         }
         catch (Exception e)
         {
-            throw new Exception(e.Message);
+            _logger.LogError(e.Message);
+            throw;
         }
     }
 
@@ -167,6 +153,7 @@ public class BarberService (IHairDbContext dbContext, UserManager<ApplicationUse
         }
         catch (Exception e)
         {
+            _logger.LogError(e.Message);
             throw new Exception(e.Message);
         }
     }

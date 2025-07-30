@@ -1,79 +1,97 @@
 ﻿using Hair.Application.Common.Dto.Auth;
 using Hair.Application.Common.Dto.Company;
+using Hair.Application.Common.Exceptions;
 using Hair.Application.Common.Interfaces;
 using Hair.Domain.Entities;
 using Hair.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Hair.Infrastructure.Services;
 
 public class AuthService(
     UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,
-    IHairDbContext dbContext) : IAuthService
+    IHairDbContext dbContext, ILogger<AuthService> _logger) : IAuthService
 {
     public async Task<AuthResponseDto> Login(LoginDto loginDto, CancellationToken cancellationToken)
     {
-        var user = await userManager.FindByEmailAsync(loginDto.Email);
-        if (user == null || user.Email != loginDto.Email)
+        try
         {
-            throw new Exception("Email adresa nije validna");
-        }
+            var user = await userManager.FindByEmailAsync(loginDto.Email);
+            if (user == null || user.Email != loginDto.Email)
+            {
+                throw new LoginException("Pogrešno uneti podaci.");
+            }
         
-        var password = await userManager.CheckPasswordAsync(user, loginDto.Password);
-        if (!password)
-        {
-            throw new Exception("Lozinka nije validna");
-        }
-        var barberId = await dbContext.Barbers.FirstOrDefaultAsync(x=>x.ApplicationUserId == user.Id, cancellationToken);
+            var password = await userManager.CheckPasswordAsync(user, loginDto.Password);
+            if (!password)
+            {
+                throw new LoginException("Pogrešno uneti podaci.");
+            }
+            var barberId = await dbContext.Barbers.FirstOrDefaultAsync(x=>x.ApplicationUserId == user.Id, cancellationToken);
         
-        var ownersCompanies = await dbContext.ApplicationUserCompany
-            .Where(i => i.ApplicationUserId == user.Id)
-            .Select(c => c.CompanyId).ToListAsync();
+            var ownersCompanies = await dbContext.ApplicationUserCompany
+                .Where(i => i.ApplicationUserId == user.Id)
+                .Select(c => c.CompanyId).ToListAsync();
         
-        //var allOwnersCompanies = await dbContext.Companies.ToListAsync(cancellationToken);
+        
+            //var allOwnersCompanies = await dbContext.Companies.ToListAsync(cancellationToken);
 
-        var roleName = Enum.GetName(typeof(Role), user.Role);
-        var result = await signInManager.PasswordSignInAsync(user, loginDto.Password, isPersistent: false, lockoutOnFailure: false);
-        return new AuthResponseDto(user.Id, user.FirstName, user.LastName, user.Email,user.PhoneNumber,
-             roleName, ownersCompanies, barberId.BarberId);
+            var roleName = Enum.GetName(typeof(Role), user.Role);
+            var result = await signInManager.PasswordSignInAsync(user, loginDto.Password, isPersistent: false, lockoutOnFailure: false);
+            return new AuthResponseDto(user.Id, user.FirstName, user.LastName, user.Email,user.PhoneNumber,
+                roleName, ownersCompanies, barberId?.BarberId);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+            Console.WriteLine(e);
+            throw;
+        }
+        
     }
 
     public async Task<AuthLevelDto> RegisterAsync(RegisterDto registerDto, CancellationToken cancellationToken)
     {
-        if (registerDto.Password != registerDto.ConfirmPassword)
-            throw new Exception("Lozinke se ne podudaraju!");
-
-        var existingUser = await userManager.FindByEmailAsync(registerDto.Email);
-        if (existingUser != null)
-            throw new Exception("Ova email adresa već postoji!");
-
-        var user = new ApplicationUser
+        try
         {
+            if (registerDto.Password != registerDto.ConfirmPassword)
+                throw new Exception("Lozinke se ne podudaraju!");
 
-            UserName = registerDto.Email,
-            Email = registerDto.Email,
-            PhoneNumber = registerDto.PhoneNumber,
-            FirstName = registerDto.FirstName,
-            LastName = registerDto.LastName,
-            Role = Role.RegisteredUser
-        };
+            var existingUser = await userManager.FindByEmailAsync(registerDto.Email);
+            if (existingUser != null)
+                throw new Exception("Ova email adresa već postoji!");
 
-        var result = await userManager.CreateAsync(user, registerDto.Password);
-        if (!result.Succeeded)
-        {
-            var errorMsg = string.Join(", ", result.Errors.Select(e => e.Description));
-            throw new Exception(errorMsg);
+            var user = new ApplicationUser
+            {
+                UserName = registerDto.Email,
+                Email = registerDto.Email,
+                PhoneNumber = registerDto.PhoneNumber,
+                FirstName = registerDto.FirstName,
+                LastName = registerDto.LastName,
+                Role = Role.RegisteredUser
+            };
+    
+            var result = await userManager.CreateAsync(user, registerDto.Password);
+            if (!result.Succeeded)
+            {
+                var errorMsg = string.Join(", ", result.Errors.Select(e => e.Description));
+                throw new Exception(errorMsg);
+            }
+            var roleName = Enum.GetName(typeof(Role), user.Role);
+            await userManager.AddToRoleAsync(user, roleName);
+            await signInManager.SignInAsync(user, isPersistent: false);
+
+            return new AuthLevelDto(user.Email, roleName);
         }
-
-
-        var roleName = Enum.GetName(typeof(Role), user.Role);
-        await userManager.AddToRoleAsync(user, roleName);
-
-
-        await signInManager.SignInAsync(user, isPersistent: false);
-
-        return new AuthLevelDto(user.Email, roleName);
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+            Console.WriteLine(e);
+            throw;
+        }
+        
 
     }
 
@@ -81,22 +99,16 @@ public class AuthService(
     {
         try
         {
-
+            /*
             var companyExistCheck = await dbContext.ApplicationUserCompany
                 .Where(x => x.CompanyId == companyOwnerDto.CompanyId).FirstOrDefaultAsync();
-
+            */
             var companyOwnerExistCheck = await userManager.FindByEmailAsync(companyOwnerDto.Email);
-
-            //provera da li taj user sto bi trebao da bude vlasnik postoji sa tim id-jem u medju tabeli 
-            /* var ownerExists = await dbContext.ApplicationUserCompany.
-                 Where(x => x.ApplicationUserId == companyOwnerExistCheck.Id).FirstOrDefaultAsync();*/
-
             if (companyOwnerExistCheck != null)
             {
                 throw new Exception($"Korisnik sa email adresom: {companyOwnerDto.Email} već postoji!");
             }
-
-
+            
             var appUser = new ApplicationUser()
             {
                 UserName = companyOwnerDto.Email,
@@ -106,17 +118,13 @@ public class AuthService(
                 LastName = companyOwnerDto.LastName,
                 Role = Role.CompanyOwner
             };
-
             var result = await userManager.CreateAsync(appUser, companyOwnerDto.Password);
-
             if (!result.Succeeded)
             {
                 var errorMsg = string.Join(", ", result.Errors.Select(e => e.Description));
                 throw new Exception(errorMsg);
             }
-
-            //company.CompanyOwnerId = appUser.Id;
-            //company.CompanyOwnerId = comapnyExistcheck.CompanyId.ToString();
+            
             var appUserCompany = new ApplicationUserCompany()
             {
                 CompanyId = companyOwnerDto.CompanyId,
@@ -129,7 +137,6 @@ public class AuthService(
 
             return new CompanyOwnerResponseDto(
                 appUser.Email,
-                //appUser.CompanyId, 
                 appUser.FirstName,
                 appUser.LastName,
                 appUser.PhoneNumber
@@ -137,7 +144,9 @@ public class AuthService(
         }
         catch (Exception ex)
         {
-            throw new Exception($"Greška prilikom kreiranja vlasnika: {ex.Message}");
+            _logger.LogError(ex, "Detaljan opis gde i šta se desilo u AuthService");
+            Console.WriteLine(ex);
+            throw;
         }
     }
 
@@ -160,7 +169,8 @@ public class AuthService(
         }
         catch (Exception e)
         {
-            throw new Exception(e.Message);
+            _logger.LogError(e, "Detaljan opis gde i šta se desilo u AuthService");
+            throw new Exception("Greška pri izmeni detalja vlasnika!");
         }
     }
 
@@ -181,6 +191,7 @@ public class AuthService(
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex, "Detaljan opis gde i šta se desilo u AuthService");
             throw new Exception("Nije moguće dodeliti kompaniju vlasniku!", ex);
         }
 
@@ -198,8 +209,9 @@ public class AuthService(
             }
             var userId = user.Id;
             
-            var companies = await dbContext.ApplicationUserCompany.Where(i=> i.ApplicationUserId == userId)
-                .Select(i=>i.Company).ToListAsync();
+            var companies = await dbContext.ApplicationUserCompany
+                .Where(i=> i.ApplicationUserId == userId)
+                .Select(i=>i.Company).ToListAsync(cancellationToken);
             
             var response = companies.Select(x=> new CompanyDetailsDto
             {
@@ -212,14 +224,13 @@ public class AuthService(
         }
         catch (Exception e)
         {
-            throw new Exception($"Greška pri dohvatanju kompanija vlasnika sa email-om: {email}!", e);
+            _logger.LogError(e, "Detaljan opis gde i šta se desilo u AuthService");
+            Console.WriteLine(e.Message);
+            throw;
         }
     }
     
     
-    
-    
-
     public async Task<bool> CheckIfCompanyOwnerExistsAsync(Guid companyId, CancellationToken cancellationToken)
     {
         var exists = await dbContext.ApplicationUserCompany

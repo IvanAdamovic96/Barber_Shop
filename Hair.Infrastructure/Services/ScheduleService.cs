@@ -21,13 +21,13 @@ public class ScheduleService(IHairDbContext dbContext,
             bool isWithinWorkHours = await IsWithinBarberWorkHours(schedule, cancellationToken);
             if (!isWithinWorkHours)
             {
-                throw new Exception("Barber is not available during the requested time.");
+                throw new Exception("Frizer nije dostupan u zahtevano vreme.");
             }
 
             var userExists = await userManager.FindByEmailAsync(schedule.email);
             if (userExists is null)
             {
-                throw new Exception("Morate biti ulogovani da bi ste zakazali tretman.");
+                throw new Exception("Morate biti ulogovani da bi ste zakazali termin.");
             }
 
             DateTime normalizedTime = new DateTime(
@@ -41,22 +41,27 @@ public class ScheduleService(IHairDbContext dbContext,
                 schedule.time.Kind
             );
 
-            var isAppointmentAvailable =
-                await IsAppointmentAvailable(schedule.barberId, normalizedTime, cancellationToken);
+            var isAppointmentAvailable = await IsAppointmentAvailable(schedule.barberId, normalizedTime, cancellationToken);
             if (isAppointmentAvailable)
             {
-                throw new ValidationException("Schedule appointment already exists.");
+                throw new ValidationException("Ovaj termin je vec zauzet.");
             }
 
             var haircut = await dbContext.Haircuts.Where(x => x.Id == schedule.haircutId)
                 .FirstOrDefaultAsync(cancellationToken);
             if (haircut == null)
             {
-                throw new ValidationException("Haircut not found.");
+                throw new ValidationException("Usluga nije pronadjena.");
             }
 
             decimal haircutDuration = haircut.Duration;
             int requiredSlots = (int)Math.Ceiling(haircutDuration / 30m);
+            
+            bool canSchedule = await CanSchedule(userExists.PhoneNumber, schedule.time);
+            if (!canSchedule)
+            {
+                throw new Exception("Možete zakazati termin samo jednom u 7 dana.");
+            }
 
             var allFreeAppointments = await GetAllFreeAppointmentsAsync(schedule.time.Date, schedule.barberId, cancellationToken);
             var freeTimes = allFreeAppointments.Select(dto => dto.dateAndTime).ToHashSet();
@@ -66,7 +71,7 @@ public class ScheduleService(IHairDbContext dbContext,
 
             if (!freeTimes.Contains(currentCheckTime))
             {
-                throw new ValidationException("The requested start time is not available.");
+                throw new ValidationException("Početno vreme nije dostupno.");
             }
 
             bookedAppointmentsTimes.Add(currentCheckTime);
@@ -89,16 +94,6 @@ public class ScheduleService(IHairDbContext dbContext,
                 throw new ValidationException($"Nema dovoljno uzastopnih slobodnih termina za ovaj tretman koji ste " +
                                               $"izabrali: {haircutDuration} minuta, izaberite drugi termin.");
             }
-
-            /*
-            AnonymousUser anonymousUser = new AnonymousUser(
-                schedule.firstName,
-                schedule.lastName,
-                schedule.email,
-                schedule.phoneNumber
-            );
-            dbContext.AnonymousUser.Add(anonymousUser);
-            */
             
             foreach (var timeSlot in bookedAppointmentsTimes)
             {
@@ -115,10 +110,9 @@ public class ScheduleService(IHairDbContext dbContext,
         catch (Exception exception)
         {
             _logger.LogError(exception, "Detaljan opis gde i šta se desilo u ScheduleService");
-            throw exception;
+            throw;
         }
     }
-    
 
     public async Task<List<GetAllUsedAppointmentsDto>> GetAllSchedulesByBarberIdAsync(
         Guid barberId, CancellationToken cancellationToken)
@@ -154,8 +148,6 @@ public class ScheduleService(IHairDbContext dbContext,
         return result;
         
     }
-
-    
     
     public async Task<List<FreeAppointmentsCheckDto>> GetAllFreeAppointmentsAsync(DateTime selectedDate, Guid barberId, CancellationToken cancellationToken)
     {
@@ -205,5 +197,16 @@ public class ScheduleService(IHairDbContext dbContext,
         var occupied = await dbContext.Appointments.Where(x => x.Barberid == barberId && x.Time == time)
             .FirstOrDefaultAsync(cancellationToken);
         return occupied != null;
+    }
+
+    public async Task<bool> CanSchedule(string phoneNumber, DateTime requestedDate)
+    {
+        var fromDate = requestedDate.AddDays(-6);
+        var toDate = requestedDate.AddDays(6);
+
+        return !await dbContext.Appointments
+            .AnyAsync(a => a.ApplicationUser.PhoneNumber == phoneNumber &&
+                           a.Time >= fromDate &&
+                           a.Time <= toDate);
     }
 }
